@@ -9,6 +9,7 @@ namespace Packet
     //klasa realizujaca packet do wysylania wiadomosci sygnalizacyjnych
     public class SendPacket
     {
+        //pierwsza zmiana lol
         private string source;                  // 
         private string destination;
         private List<string> parameters;//jakies parametry pakietu
