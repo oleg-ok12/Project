@@ -1,1 +1,2 @@
 D:\Install\visual studio 2012\Projects\NetworkCallController\NetworkCallController\bin\Debug\NetworkCallController.exe.config
+D:\Install\GitHub\Projects\TSST\NetworkCallController\NetworkCallController\bin\Debug\NetworkCallController.exe.config

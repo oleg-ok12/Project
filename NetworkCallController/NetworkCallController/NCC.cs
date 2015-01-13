@@ -15,9 +15,11 @@ namespace NetworkCallController
         public bool isRunning { get; set; }//treba? czy NNC chodzi czy nie.
         private string myAddress;
         private Dictionary<string, string> dns;//dns--> wiki. 1string-nazwa dla nas. 2string-adres ip
-        private int maxConnections;
+        private int maxConnections;//polaczenia
 
+        
 
+        
         public NCC()
         {
 
@@ -39,5 +41,5 @@ namespace NetworkCallController
 
 
    
-    }
+    
 }
