@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace NetworkCallController
 {
-     //klasa reprezentuje pewne polaczenie NCC z kims
+    //klasa reprezentuje pewne polaczenie NCC z kims
     public class Connection
     {
         public string source { get; private set; }
@@ -29,4 +29,5 @@ namespace NetworkCallController
             this.number = number;
             this.status = status;
         }
+    }
 }

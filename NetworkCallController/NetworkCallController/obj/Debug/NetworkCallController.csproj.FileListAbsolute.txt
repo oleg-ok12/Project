@@ -1,2 +1,10 @@
 D:\Install\visual studio 2012\Projects\NetworkCallController\NetworkCallController\bin\Debug\NetworkCallController.exe.config
 D:\Install\GitHub\Projects\TSST\NetworkCallController\NetworkCallController\bin\Debug\NetworkCallController.exe.config
+D:\Install\GitHub\Projects\TSST\NetworkCallController\NetworkCallController\obj\Debug\NetworkCallController.csprojResolveAssemblyReference.cache
+D:\Install\GitHub\Projects\TSST\NetworkCallController\NetworkCallController\obj\Debug\NetworkCallController.NCC.resources
+D:\Install\GitHub\Projects\TSST\NetworkCallController\NetworkCallController\obj\Debug\NetworkCallController.Properties.Resources.resources
+D:\Install\GitHub\Projects\TSST\NetworkCallController\NetworkCallController\obj\Debug\NetworkCallController.csproj.GenerateResource.Cache
+D:\Install\GitHub\Projects\TSST\NetworkCallController\NetworkCallController\bin\Debug\NetworkCallController.exe
+D:\Install\GitHub\Projects\TSST\NetworkCallController\NetworkCallController\bin\Debug\NetworkCallController.pdb
+D:\Install\GitHub\Projects\TSST\NetworkCallController\NetworkCallController\obj\Debug\NetworkCallController.exe
+D:\Install\GitHub\Projects\TSST\NetworkCallController\NetworkCallController\obj\Debug\NetworkCallController.pdb
