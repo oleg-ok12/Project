@@ -54,6 +54,7 @@
       <DependentUpon>NCC.cs</DependentUpon>
     </Compile>
     <Compile Include="PC.cs" />
+    <Compile Include="PolicyDirectory.cs" />
     <Compile Include="Port.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

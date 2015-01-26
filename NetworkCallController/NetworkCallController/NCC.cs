@@ -25,23 +25,24 @@ namespace NetworkCallController
         private Dictionary<string, string> dns;//dns--> wiki. 1string-nazwa dla nas. 2string-adres ip
 
         private PC pc;
-
-        
-        
-
-
+        private Thread ReceiveThread;
+        private PolicyDirectory pd;
 
         public NCC()
         {
-            // myAddress = "1.1.1";
+            InitializeComponent();
 
-           /* (new Thread(new ThreadStart(() =>
+            pc = new PC();
+            
+
+            (new Thread(new ThreadStart(() =>
             {
                 Thread.Sleep(100);
                 inicjalizacja();
-            }))).Start();*/
+            }))).Start();
 
-
+            pc = new PC();
+            
 
         }
 
@@ -57,8 +58,8 @@ namespace NetworkCallController
             {
                 try
                 {
-                   
 
+                    ReceiveThread = new Thread(new ThreadStart(ReceiveFunction));
                 }
 
                 catch
@@ -67,20 +68,13 @@ namespace NetworkCallController
                 }
             }   
         }
-
+        
+        //funkcja skanuje pakiety na wejsciu
         public void ReceiveFunction()
         {
             try
-            {
-                //Packet.SendPacket sPacket;
-                //string ccAddress=
-                //string pdAddress=
-
+            {                            
                 
-
-                //Hello!!
-                 //send(myAddress, "1.1.1", "Hello");
-
                 while (true)
                 {
 
@@ -88,30 +82,71 @@ namespace NetworkCallController
 
                     foreach (Message msg in messages)
                     {
-                        string src = msg.source_component_name;
-                        string dst = msg.dest_component_name;
-                        var parames = msg.parameters;
+                        Message tempMessage = new Message();
+                        tempMessage.source_component_name = "NCC";
+                        tempMessage.parameters[1] = "NCC";
 
                         try
                         {
-                            switch (parames[0])//zakladam ze w parames[0] bedzie przesylana nazwa akcji
+                            switch (tempMessage.parameters[0])//zakladam ze w parames[0] bedzie przesylana nazwa message'a
                             {
-                                    
+                                    //w sumie tu dodac rozne mozliwosci, tylko nie wiem co jeszcze
+                                case "CALL_REQUEST":
+                                    if ((msg.source_component_name == "CLIENT1") ||(msg.source_component_name=="CLIENT2"))
+                                    {
+                                        setLogText("Dostalem zadanie polaczenia od" + msg.source_component_name);
+                                        //askForCall(pd);
+                                        //tu otrzymuje cos od pd
+                                        //tu cos sprawdza
+                                        tempMessage.dest_component_name = "CC1";
+                                        tempMessage.parameters[0] = "CONNECTION_REQUEST";
+                                       
+
+                                       // pc.sendData("CC1", tempMessage);
+                                    }
+                                                                        
+                                    break;
+
+                                case "ESTABLISHED":
+                                    if (msg.source_component_name == "CC1")
+                                    {
+                                        setLogText("CC1 powiedzial ze polaczenie zostalo nawiazane");
+                                        tempMessage.parameters[0] = "OK";
+                                        tempMessage.dest_component_name = "CLIENT1";
+                                        //pc.sendData("CLIENT1", tempMessage);
+                                        tempMessage.dest_component_name = "CLIENT2";
+                                        //pc.sendData("CLIENT2", tempMessage);
+                                    }   
+                                    break;
+
+                                case "CALL_TEARDOWN":                   //rozlaczenie od clienta, nie wiem czy to zrobimy
+                                    setLogText("Dostalem zadanie rozlaczenia od" + msg.source_component_name);    //przy Teardown musi cos sprawzdac u PD?
+                                    tempMessage.parameters[0] = "CALL_TEARDOWN";
+                                    tempMessage.dest_component_name = "CC1";
+                                    //pc.sendData("CC1", tempMessage);
+                                      break;
+
+                                case "NO_ESTABLISHED":
+                                      if (msg.source_component_name == "CC1")
+                                      {
+                                          setLogText("CC1 powiedzial ze polaczenie rozerwane");
+                                          tempMessage.parameters[0] = "NO_ESTABLISHED";
+                                          tempMessage.dest_component_name = "CLIENT1";
+                                          //pc.sendData("CLIENT1", tempMessage);
+                                          tempMessage.dest_component_name = "CLIENT2";
+                                          //pc.sendData("CLIENT2", tempMessage);
+                                        
+                                      }
+                                      break;
+                                default: break;
                             }
                         }
                         catch
                         {
- 
+                            setLogText("Cos jest zle przy odczytaniu przychadzacego message");
                         }
-
                     }
-
-
-
                 }
-
-
-
             }
             catch
             {
@@ -147,6 +182,13 @@ namespace NetworkCallController
             }
         }
 
+
+        public bool askForCall(PolicyDirectory pd)
+        {
+       
+            return true;
+        }
+
        /* public void send(string src, string dst, string payload)
         {
             Packet.SendPacket sendPack = new Packet.SendPacket(src, dst, payload);
@@ -159,6 +201,7 @@ namespace NetworkCallController
             Packet.SendPacket sendPack = new Packet.SendPacket(src, dst, payloadList);
             sendBF.Serialize(networkStream, sendPack);
         }*/
+   
     }
 
 
