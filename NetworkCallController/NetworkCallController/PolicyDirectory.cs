@@ -8,13 +8,13 @@ namespace NetworkCallController
 {
     class PolicyDirectory
     {
-        private bool accept_conn;
 
+        public bool isAllow;
 
-        PolicyDirectory()
+       public PolicyDirectory()
         {
-            accept_conn = true;
- 
+
+            isAllow = true;
         }
 
 

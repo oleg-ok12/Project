@@ -20,20 +20,22 @@ namespace NetworkCallController
 {
     public partial class NCC : Form
     {
-        public bool isRunning { get; set; }//treba? czy NNC chodzi czy nie.
+        /*public bool isRunning { get; set; }//treba? czy NNC chodzi czy nie.
         private string myAddress;
         private Dictionary<string, string> dns;//dns--> wiki. 1string-nazwa dla nas. 2string-adres ip
-
+        */
         private PC pc;
         private Thread ReceiveThread;
         private PolicyDirectory pd;
+
+        private bool canCall;
 
         public NCC()
         {
             InitializeComponent();
 
             pc = new PC();
-            
+            pd = new PolicyDirectory();
 
             (new Thread(new ThreadStart(() =>
             {
@@ -41,7 +43,7 @@ namespace NetworkCallController
                 inicjalizacja();
             }))).Start();
 
-            pc = new PC();
+           
             
 
         }
@@ -95,14 +97,16 @@ namespace NetworkCallController
                                     if ((msg.source_component_name == "CLIENT1") ||(msg.source_component_name=="CLIENT2"))
                                     {
                                         setLogText("Dostalem zadanie polaczenia od" + msg.source_component_name);
-                                        //askForCall(pd);
-                                        //tu otrzymuje cos od pd
-                                        //tu cos sprawdza
-                                        tempMessage.dest_component_name = "CC1";
-                                        tempMessage.parameters[0] = "CONNECTION_REQUEST";
-                                       
+                                        if (askForCall(pd))  // jakies sprawdzenie w PolicyDirectory
+                                        {
+                                            //tu otrzymuje cos od pd
+                                            //tu cos sprawdza
+                                            tempMessage.dest_component_name = "CC1";
+                                            tempMessage.parameters[0] = "CONNECTION_REQUEST";
 
-                                       // pc.sendData("CC1", tempMessage);
+
+                                            // pc.sendData("CC1", tempMessage);
+                                        }
                                     }
                                                                         
                                     break;
@@ -129,7 +133,7 @@ namespace NetworkCallController
                                 case "NO_ESTABLISHED":
                                       if (msg.source_component_name == "CC1")
                                       {
-                                          setLogText("CC1 powiedzial ze polaczenie rozerwane");
+                                          setLogText("CC1 powiedzial ze polaczenie jest rozerwane");
                                           tempMessage.parameters[0] = "NO_ESTABLISHED";
                                           tempMessage.dest_component_name = "CLIENT1";
                                           //pc.sendData("CLIENT1", tempMessage);
@@ -150,7 +154,7 @@ namespace NetworkCallController
             }
             catch
             {
-               setLogText("Cos sie spieprzylo w Receive function");
+               setLogText("Cos jest zle  w Receive function");
             }
         }
 
@@ -183,10 +187,19 @@ namespace NetworkCallController
         }
 
 
-        public bool askForCall(PolicyDirectory pd)
+        private bool askForCall(PolicyDirectory pd)
         {
-       
-            return true;
+            if (pd.isAllow)
+            {
+                setLogText("PD: Pozwalam na zestawienie polaczenia");
+                return true;
+            }
+
+            else
+            {
+                setLogText("PD: nie pozwalam na zestawienie polaczenia");
+                return false;
+            }
         }
 
        /* public void send(string src, string dst, string payload)
