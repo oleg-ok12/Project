@@ -88,8 +88,8 @@ namespace NetworkCallController
             pd = new PolicyDirectory();
 
             inicjalizacja();
-                                   
-            /*(new Thread(new ThreadStart(() =>
+            /*                       
+            (new Thread(new ThreadStart(() =>
             {
                 Thread.Sleep(100);
                 inicjalizacja();
@@ -101,7 +101,7 @@ namespace NetworkCallController
        delegate void inicjalizacjaCallback();
         private void inicjalizacja()
         {
-            /*if (this.InvokeRequired)
+            if (this.InvokeRequired)
             {
                 this.Invoke(new inicjalizacjaCallback(inicjalizacja), new object[] { });
             }
@@ -109,15 +109,17 @@ namespace NetworkCallController
             {
                 try
                 {                                     
-
-                     //ReceiveThread = new Thread(new ThreadStart(ReceiveFunction));
+                    /*
+                     ReceiveThread = new Thread(new ThreadStart(ReceiveFunction));
+                     ReceiveThread.IsBackground = true;
+                     ReceiveThread.Start();*/
                 }
 
                 catch
                 {
                     richTextBox_Log.Text = "cos jest zle";
                 }
-            }*/   
+            } 
         }
 
 
@@ -132,10 +134,10 @@ namespace NetworkCallController
         //funkcja skanuje pakiety na wejsciu
         public void ReceiveFunction()
         {
-           /* try
+           try
             {                            
                 
-                while (true)
+                /*while (true)
                 {*/
                     
                     Queue messages = pc.getData();
@@ -161,13 +163,19 @@ namespace NetworkCallController
                                         if (askForCall(pd))  // jakies sprawdzenie w PolicyDirectory
                                         {
                                             //tu cos sprawdza
-                                            tempMessage.dest_component_name = "CC1";
+                                            /*tempMessage.dest_component_name = "CC1";
                                             tempMessage.parameters.Add("CONNECTION_REQUEST");//parameters[0]
                                             tempMessage.parameters.Add(pd.askDirectory("CLIENT1"));  // adres wywolujacego
                                             tempMessage.parameters.Add(pd.askDirectory("CLIENT2"));   //adres wywolywanego 
                                             tempMessage.parameters.Add(msg.parameters[3]); //liczba kontenerow
+                                            tempMessage.parameters.Add(CallID);*/
+                                            tempMessage.dest_component_name = "CLIENT1";
+                                            tempMessage.parameters.Add("OK");//parameters[0]
+                                            // tempMessage.parameters.Add(pd.askDirectory("CLIENT1"));  // adres wywolujacego
+                                           // tempMessage.parameters.Add(pd.askDirectory("CLIENT2"));   //adres wywolywanego 
+                                            tempMessage.parameters.Add(msg.parameters[3]); //liczba kontenerow
                                             tempMessage.parameters.Add(CallID);
-                                            
+                                            pc.sendData("CLIENT1", tempMessage);
                                             // pc.sendData("CC1", tempMessage);
                                             
                                         }
@@ -232,12 +240,12 @@ namespace NetworkCallController
                             setLogText("Problem przy odczytaniu przychadzacego message\n");
                         }
                     }
-                /*}
+                //}
             }
             catch
             {
                setLogText("Problem  w Receive function");
-            }*/
+            }
         }
         
 

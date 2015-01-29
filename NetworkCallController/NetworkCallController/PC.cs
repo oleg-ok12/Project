@@ -46,24 +46,27 @@ namespace NetworkCallController
         public Queue getData()
         {
             Queue received_messages = new Queue();
-            
+            Queue messages = new Queue();
+
             foreach (Port port in NCC.int_ports.Values)
             {
                 sync_data = port.getData();
-            }
-            if (sync_data != null)
-            {
-                foreach (String str in sync_data)
+
+
+                if (sync_data != null)
                 {
-                    //CharacteristicInformation info = new CharacteristicInformation();
-                    Message msg = new Message();
-                    msg = (Message)Serialization.DeserializeObject(str, typeof(Message));
-                    received_messages.Enqueue(msg);
+                    foreach (String str in sync_data)
+                    {
+                        //CharacteristicInformation info = new CharacteristicInformation();
+                        Message msg = new Message();
+                        msg = (Message)Serialization.DeserializeObject(str, typeof(Message));
+                        received_messages.Enqueue(msg);
+                    }
                 }
-            }
-            else
-            {
-                Console.WriteLine("NCC nie otrzymal zadnych danych");
+                else
+                {
+                    Console.WriteLine("NCC nie otrzymal zadnych danych");
+                }
             }
 
             return received_messages;
