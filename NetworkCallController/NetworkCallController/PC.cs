@@ -94,6 +94,15 @@ namespace NetworkCallController
                         
                    NCC.int_ports[1].send(serialized_message);
                     break;
+                    case "CLIENT2":
+
+                    NCC.int_ports[2].send(serialized_message);
+                    break;
+                    case "CC":
+
+                    NCC.int_ports[3].send(serialized_message);
+                    break;
+
                 default: break;
                 }
                 
