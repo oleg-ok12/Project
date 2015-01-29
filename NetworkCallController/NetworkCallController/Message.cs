@@ -12,7 +12,7 @@ namespace NetworkCallController
         public List<int> source_component_id;
         public string dest_component_name;
         public List<int> dest_component_id;
-        public List<string> parameters;//jakies parametry pakietu ZMIENILEM SOBIE TUTAJ NA STRINGA
+        public List<object> parameters;//jakies parametry pakietu ZMIENILEM SOBIE TUTAJ NA STRINGA
 
 
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -24,12 +24,12 @@ namespace NetworkCallController
 
         public Message()
         {
-            parameters = new List<string>();
+            parameters = new List<object>();
             source_component_id = new List<int>();
             dest_component_id = new List<int>();
         }
 
-        public Message(string scn, List<int> sc_id, string dcn, List<int> ds_id, List<string> param)
+        public Message(string scn, List<int> sc_id, string dcn, List<int> ds_id, List<object> param)
         {
             source_component_name = scn;
             source_component_id = sc_id;

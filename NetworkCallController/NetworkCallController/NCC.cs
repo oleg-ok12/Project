@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Runtime.InteropServices;
 
 using System.Net;
 using System.Net.Sockets;
@@ -20,57 +21,114 @@ namespace NetworkCallController
 {
     public partial class NCC : Form
     {
-        /*public bool isRunning { get; set; }//treba? czy NNC chodzi czy nie.
-        private string myAddress;
-        private Dictionary<string, string> dns;//dns--> wiki. 1string-nazwa dla nas. 2string-adres ip
-        */
         private PC pc;
         private Thread ReceiveThread;
         private PolicyDirectory pd;
-
+        public int CallID;
         private bool canCall;
+
+        public static SerializableDictionary<int, Port> int_ports;
+        
+        private Thread connectThread;
+        string configure;
 
         public NCC()
         {
             InitializeComponent();
 
+
+            Win32.AllocConsole();
+            Console.WriteLine("Wybierz NCC (wpisz 1)");
+
+            // Console.Write("Podaj nazwę pliku: ");
+            string configname = Console.ReadLine();
+            int_ports = new SerializableDictionary<int, Port>();
+            try
+            {
+                System.IO.FileStream file = new System.IO.FileStream("NCC" + configname + ".config", System.IO.FileMode.Open, System.IO.FileAccess.Read);
+                System.IO.StreamReader conf = new System.IO.StreamReader("NCC" + configname + ".config");
+                configure = conf.ReadToEnd().ToString();
+                conf.Close();
+                file.Close();
+            }
+            catch
+            {
+            }
+
+            try
+            {
+                string[] interfacesTab = configure.Split(new string[] { "-", "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
+
+                int i = 0;
+                while (i < interfacesTab.Length - 1)
+                {
+                    Data typeofdata = Data.message;
+                    Port p = new Port(Convert.ToInt32(interfacesTab[i + 1]), Convert.ToInt32(interfacesTab[i + 2]), typeofdata);
+                    int_ports.Add(Convert.ToInt32(interfacesTab[i]), p);
+                    i += 3;
+                }
+                //Console.WriteLine(ports[45].getPortID());
+                //Console.WriteLine(ports[52].getNodeID());
+                // textBox7.Text = interfacesTab[1];
+            }
+            catch
+            {
+
+                Console.WriteLine("Błąd wczytywania. Wciśnij dowolny klawisz aby zakończyć działanie programu...");
+                Console.ReadKey();
+                Console.Clear();
+                Environment.Exit(0);
+
+
+            }
+
+            CallID = 0;
             pc = new PC();
+            pc.initializePC();
             pd = new PolicyDirectory();
 
-            (new Thread(new ThreadStart(() =>
+            inicjalizacja();
+                                   
+            /*(new Thread(new ThreadStart(() =>
             {
                 Thread.Sleep(100);
                 inicjalizacja();
-            }))).Start();
-
-           
+            }))).Start();*/
             
-
         }
 
 
        delegate void inicjalizacjaCallback();
         private void inicjalizacja()
         {
-            if (this.InvokeRequired)
+            /*if (this.InvokeRequired)
             {
                 this.Invoke(new inicjalizacjaCallback(inicjalizacja), new object[] { });
             }
             else
             {
                 try
-                {
+                {                                     
 
-                    ReceiveThread = new Thread(new ThreadStart(ReceiveFunction));
+                     //ReceiveThread = new Thread(new ThreadStart(ReceiveFunction));
                 }
 
                 catch
                 {
                     richTextBox_Log.Text = "cos jest zle";
                 }
-            }   
+            }*/   
         }
-        
+
+
+        private void connectToNetwork(object para)
+        {
+            Port tmp_port = (Port)para;
+            tmp_port.connect();
+
+
+        }
+
         //funkcja skanuje pakiety na wejsciu
         public void ReceiveFunction()
         {
@@ -79,43 +137,66 @@ namespace NetworkCallController
                 
                 while (true)
                 {
-
+                    
                     Queue messages = pc.getData();
+                        
 
                     foreach (Message msg in messages)
                     {
+                        
                         Message tempMessage = new Message();
                         tempMessage.source_component_name = "NCC";
-                        tempMessage.parameters[1] = "NCC";
+                        
 
                         try
                         {
-                            switch (msg.parameters[0])//zakladam ze w parames[0] bedzie przesylana nazwa message'a
+                            switch ((String)msg.parameters[0])//zakladam ze w parames[0] bedzie przesylana nazwa message'a
                             {
                                     //w sumie tu dodac rozne mozliwosci, tylko nie wiem co jeszcze
                                 case "CALL_REQUEST":
-                                    if ((msg.source_component_name == "CLIENT1") ||(msg.source_component_name=="CLIENT2"))
+                                    CallID++;
+                                    if (msg.source_component_name == "CLIENT1") 
                                     {
-                                        setLogText("Dostalem zadanie polaczenia od" + msg.source_component_name);
+                                        setLogText("Dostalem zadanie polaczenia od" + msg.source_component_name + "\n");
                                         if (askForCall(pd))  // jakies sprawdzenie w PolicyDirectory
                                         {
-                                            //tu otrzymuje cos od pd
                                             //tu cos sprawdza
                                             tempMessage.dest_component_name = "CC1";
-                                            tempMessage.parameters[0] = "CONNECTION_REQUEST";
-
-
-                                             pc.sendData("CC1", tempMessage);
+                                            tempMessage.parameters.Add("CONNECTION_REQUEST");//parameters[0]
+                                            tempMessage.parameters.Add(pd.askDirectory("CLIENT1"));  // adres wywolujacego
+                                            tempMessage.parameters.Add(pd.askDirectory("CLIENT2"));   //adres wywolywanego 
+                                            tempMessage.parameters.Add(msg.parameters[3]); //liczba kontenerow
+                                            tempMessage.parameters.Add(CallID);
+                                            // pc.sendData("CC1", tempMessage);
+                                            
                                         }
                                     }
-                                                                        
+
+                                    if (msg.source_component_name == "CLIENT2")
+                                    {
+                                        setLogText("Dostalem zadanie polaczenia od" + msg.source_component_name + "\n");
+                                        if (askForCall(pd))  // jakies sprawdzenie w PolicyDirectory
+                                        {
+                                            //tu cos sprawdza
+                                            tempMessage.dest_component_name = "CC1";
+                                            tempMessage.parameters.Add("CONNECTION_REQUEST");//parameters[0]
+                                            tempMessage.parameters.Add(pd.askDirectory("CLIENT2"));  
+                                            tempMessage.parameters.Add(pd.askDirectory("CLIENT1"));
+                                            tempMessage.parameters.Add(msg.parameters[3]); //liczba kontenerow
+                                            tempMessage.parameters.Add(CallID);                                                                                    
+                                            // pc.sendData("CC1", tempMessage);
+                                        }
+                                    }
+                                        
+                                
+
                                     break;
 
                                 case "ESTABLISHED":
                                     if (msg.source_component_name == "CC1")
                                     {
-                                        setLogText("CC1 powiedzial ze polaczenie zostalo nawiazane");
-                                        tempMessage.parameters[0] = "OK";
+                                        setLogText("CC1 powiedzial ze polaczenie zostalo nawiazane\n");
+                                        tempMessage.parameters.Add("OK");
                                         tempMessage.dest_component_name = "CLIENT1";
                                         pc.sendData("CLIENT1", tempMessage);
                                         tempMessage.dest_component_name = "CLIENT2";
@@ -123,9 +204,9 @@ namespace NetworkCallController
                                     }   
                                     break;
 
-                                case "CALL_TEARDOWN":                   //rozlaczenie od clienta, nie wiem czy to zrobimy
-                                    setLogText("Dostalem zadanie rozlaczenia od" + msg.source_component_name);    //przy Teardown musi cos sprawzdac u PD?
-                                    tempMessage.parameters[0] = "CALL_TEARDOWN";
+                                case "CALL_TEARDOWN":    //rozlaczenie od clienta, nie wiem czy to zrobimy
+                                    setLogText("Dostalem zadanie rozlaczenia od" + msg.source_component_name+"\n");    //przy Teardown musi cos sprawzdac u PD?
+                                    tempMessage.parameters.Add("CALL_TEARDOWN");
                                     tempMessage.dest_component_name = "CC1";
                                     pc.sendData("CC1", tempMessage);
                                       break;
@@ -133,8 +214,8 @@ namespace NetworkCallController
                                 case "NO_ESTABLISHED":
                                       if (msg.source_component_name == "CC1")
                                       {
-                                          setLogText("CC1 powiedzial ze polaczenie jest rozerwane");
-                                          tempMessage.parameters[0] = "NO_ESTABLISHED";
+                                          setLogText("CC1 powiedzial ze polaczenie jest rozerwane\n");
+                                          tempMessage.parameters.Add("NO_ESTABLISHED");
                                           tempMessage.dest_component_name = "CLIENT1";
                                           pc.sendData("CLIENT1", tempMessage);
                                           tempMessage.dest_component_name = "CLIENT2";
@@ -147,18 +228,17 @@ namespace NetworkCallController
                         }
                         catch
                         {
-                            setLogText("Cos jest zle przy odczytaniu przychadzacego message");
+                            setLogText("Problem przy odczytaniu przychadzacego message\n");
                         }
                     }
                 }
             }
             catch
             {
-               setLogText("Cos jest zle  w Receive function");
+               setLogText("Problem  w Receive function");
             }
         }
-
-
+        
 
         //funcja ktora bedzie wyswietlala tekst w okienku loga
         delegate void setLogTextCallback(string text);
@@ -191,33 +271,40 @@ namespace NetworkCallController
         {
             if (pd.isAllow)
             {
-                setLogText("PD: Pozwalam na zestawienie polaczenia");
+                setLogText("PD: Pozwalam na zestawienie polaczenia\n");
                 return true;
             }
 
             else
             {
-                setLogText("PD: nie pozwalam na zestawienie polaczenia");
+                setLogText("PD: nie pozwalam na zestawienie polaczenia\n");
                 return false;
             }
         }
 
-       /* public void send(string src, string dst, string payload)
+        private void button1_Click(object sender, EventArgs e)
         {
-            Packet.SendPacket sendPack = new Packet.SendPacket(src, dst, payload);
-            sendBF.Serialize(networkStream, sendPack);
-
+            ReceiveFunction();
+            
         }
 
-        public void send(string src, string dst, List<string> payloadList)
-        {
-            Packet.SendPacket sendPack = new Packet.SendPacket(src, dst, payloadList);
-            sendBF.Serialize(networkStream, sendPack);
-        }*/
-   
+        
     }
 
+    class Win32
+    {
+        /// <summary>
+        /// Allocates a new console for current process.
+        /// </summary>
+        [DllImport("kernel32.dll")]
+        public static extern Boolean AllocConsole();
 
+        /// <summary>
+        /// Frees the console.
+        /// </summary>
+        [DllImport("kernel32.dll")]
+        public static extern Boolean FreeConsole();
+    }
 
    
     
