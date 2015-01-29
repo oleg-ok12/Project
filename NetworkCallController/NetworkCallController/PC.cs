@@ -10,7 +10,7 @@ namespace NetworkCallController
 {
     class PC  //Packet Controller - ma służyć do odbierania i wysyłania wiadomości sygnalizacyjnych między komponentami
     {
-        public SerializableDictionary<int, Port> ports; // porty
+        public SerializableDictionary<String, Port> ports; // porty
         public SerializableDictionary<String, int> name_id;  //potrzeba do zmiany nazwy elementu na odpowiedni port - element który coś chce wysłać podaje nazwę np. "NODE1" a PC znajduje odpowiedni port
 
         private Thread connectThread;
@@ -21,7 +21,7 @@ namespace NetworkCallController
 
         public PC()
         {
-            ports = new SerializableDictionary<int, Port>();
+            ports = new SerializableDictionary<String, Port>();
             name_id = new SerializableDictionary<string, int>();
         }
 
@@ -67,23 +67,23 @@ namespace NetworkCallController
 
             String serialized_message = Serialization.SerializeObject(message);
 
-            int id_port_out = -1;
-            foreach (String name in name_id.Keys)
-            {
-                if (name == port_out)
-                {
-                    id_port_out = name_id[name];
-                }
-            }
+            //int id_port_out=-1;
+            //foreach (String name in name_id.Keys)
+            //{
+            //    if(name == port_out)
+            //    {
+            //        id_port_out = name_id[name];
+            //    }
+            //}
 
             try
             {
-                ports[id_port_out].send(serialized_message);
+                ports[port_out].send(serialized_message);
             }
             catch (System.IndexOutOfRangeException e)
             {
                 throw new System.ArgumentOutOfRangeException(
-            "Parameter index is out of range. Port " + id_port_out + "does not exist.");
+            "Parameter index is out of range. Port " + port_out + "does not exist.");
             }
         }
 
