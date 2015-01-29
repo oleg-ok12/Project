@@ -35,6 +35,7 @@
             this.butConn = new System.Windows.Forms.Button();
             this.butClear = new System.Windows.Forms.Button();
             this.richTextBox_Log = new System.Windows.Forms.RichTextBox();
+            this.button1 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // labIP
@@ -82,7 +83,7 @@
             // 
             // butClear
             // 
-            this.butClear.Location = new System.Drawing.Point(195, 163);
+            this.butClear.Location = new System.Drawing.Point(436, 181);
             this.butClear.Name = "butClear";
             this.butClear.Size = new System.Drawing.Size(75, 23);
             this.butClear.TabIndex = 5;
@@ -94,15 +95,26 @@
             // 
             this.richTextBox_Log.Location = new System.Drawing.Point(32, 219);
             this.richTextBox_Log.Name = "richTextBox_Log";
-            this.richTextBox_Log.Size = new System.Drawing.Size(282, 132);
+            this.richTextBox_Log.Size = new System.Drawing.Size(479, 163);
             this.richTextBox_Log.TabIndex = 6;
             this.richTextBox_Log.Text = "";
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(265, 181);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(94, 23);
+            this.button1.TabIndex = 7;
+            this.button1.Text = "Odswiez obdior";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // NCC
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(364, 433);
+            this.ClientSize = new System.Drawing.Size(534, 433);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.richTextBox_Log);
             this.Controls.Add(this.butClear);
             this.Controls.Add(this.butConn);
@@ -126,6 +138,7 @@
         private System.Windows.Forms.Button butConn;
         private System.Windows.Forms.Button butClear;
         private System.Windows.Forms.RichTextBox richTextBox_Log;
+        private System.Windows.Forms.Button button1;
     }
 }
 

@@ -11,3 +11,12 @@ D:\Install\GitHub\Projects\TSST\NetworkCallController\NetworkCallController\obj\
 E:\sem5\TSST2\Project\NetworkCallController\NetworkCallController\bin\Debug\NetworkCallController.exe.config
 E:\sem5\TSST2\Project\NetworkCallController\NetworkCallController\obj\Debug\NetworkCallController.exe
 E:\sem5\TSST2\Project\NetworkCallController\NetworkCallController\obj\Debug\NetworkCallController.pdb
+C:\Users\Marta\Desktop\TSST-PROJEKT\TSST-PROJEKT\Project\Project\NetworkCallController\NetworkCallController\bin\Debug\NetworkCallController.exe.config
+C:\Users\Marta\Desktop\TSST-PROJEKT\TSST-PROJEKT\Project\Project\NetworkCallController\NetworkCallController\bin\Debug\NetworkCallController.exe
+C:\Users\Marta\Desktop\TSST-PROJEKT\TSST-PROJEKT\Project\Project\NetworkCallController\NetworkCallController\bin\Debug\NetworkCallController.pdb
+C:\Users\Marta\Desktop\TSST-PROJEKT\TSST-PROJEKT\Project\Project\NetworkCallController\NetworkCallController\obj\Debug\NetworkCallController.csprojResolveAssemblyReference.cache
+C:\Users\Marta\Desktop\TSST-PROJEKT\TSST-PROJEKT\Project\Project\NetworkCallController\NetworkCallController\obj\Debug\NetworkCallController.NCC.resources
+C:\Users\Marta\Desktop\TSST-PROJEKT\TSST-PROJEKT\Project\Project\NetworkCallController\NetworkCallController\obj\Debug\NetworkCallController.Properties.Resources.resources
+C:\Users\Marta\Desktop\TSST-PROJEKT\TSST-PROJEKT\Project\Project\NetworkCallController\NetworkCallController\obj\Debug\NetworkCallController.csproj.GenerateResource.Cache
+C:\Users\Marta\Desktop\TSST-PROJEKT\TSST-PROJEKT\Project\Project\NetworkCallController\NetworkCallController\obj\Debug\NetworkCallController.exe
+C:\Users\Marta\Desktop\TSST-PROJEKT\TSST-PROJEKT\Project\Project\NetworkCallController\NetworkCallController\obj\Debug\NetworkCallController.pdb
