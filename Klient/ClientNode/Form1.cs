@@ -44,6 +44,7 @@ namespace ClientNode
         {
             
             InitializeComponent();
+            
             button1.Enabled = true;   //przycisk wyslij nieaktywny na poczatku
             //button3.Enabled = false; //przycisk uruchomienia portu wyjściowego nieaktywny póki wejściowy nieuruchomiony
            // rozłączToolStripMenuItem.Enabled = false;
@@ -107,6 +108,7 @@ namespace ClientNode
 
 
             }
+            
             initializeNode();
             
         }       
