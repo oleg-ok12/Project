@@ -8,3 +8,6 @@ D:\Install\GitHub\Projects\TSST\NetworkCallController\NetworkCallController\bin\
 D:\Install\GitHub\Projects\TSST\NetworkCallController\NetworkCallController\bin\Debug\NetworkCallController.pdb
 D:\Install\GitHub\Projects\TSST\NetworkCallController\NetworkCallController\obj\Debug\NetworkCallController.exe
 D:\Install\GitHub\Projects\TSST\NetworkCallController\NetworkCallController\obj\Debug\NetworkCallController.pdb
+E:\sem5\TSST2\Project\NetworkCallController\NetworkCallController\bin\Debug\NetworkCallController.exe.config
+E:\sem5\TSST2\Project\NetworkCallController\NetworkCallController\obj\Debug\NetworkCallController.exe
+E:\sem5\TSST2\Project\NetworkCallController\NetworkCallController\obj\Debug\NetworkCallController.pdb
