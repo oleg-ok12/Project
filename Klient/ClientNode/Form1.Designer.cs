@@ -218,7 +218,7 @@
             // wyjścieToolStripMenuItem
             // 
             this.wyjścieToolStripMenuItem.Name = "wyjścieToolStripMenuItem";
-            this.wyjścieToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.wyjścieToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
             this.wyjścieToolStripMenuItem.Text = "Wyjście";
             this.wyjścieToolStripMenuItem.Click += new System.EventHandler(this.wyjścieToolStripMenuItem_Click);
             // 

@@ -25,7 +25,7 @@ namespace NetworkCallController
         [XmlEnum("manager")]
         manager = 3,
         [XmlEnum("control")]            //informacja od NCC
-        control = 4
+        message = 4
     }
     public class Port
     {
