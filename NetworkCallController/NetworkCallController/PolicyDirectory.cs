@@ -34,9 +34,9 @@ namespace NetworkCallController
            }
            else if (nazwa_klienta == "CLIENT2")
            {
-               client1.Add(1);
-               client1.Add(0);
-               client1.Add(2);
+               client2.Add(1);
+               client2.Add(0);
+               client2.Add(2);
                slownik_adresow.Add("CLIENT2", client2);
                return client2;
            }
