@@ -25,12 +25,11 @@ namespace ClientNode
         //private string destclientname;
         //private bool connect;
         Thread polacz;
-       // private PortIn pIn;
-       // private PortOut pOut;
         string configName;
         private int idNode;
         int data_type;
         int client_num;
+        int liczba_kontenerow;
         int? container_number;
 
         /////////////////////////
@@ -43,9 +42,7 @@ namespace ClientNode
       //  public Form1();
         public Form1()
         {
-
-
-
+            
             InitializeComponent();
             button1.Enabled = true;   //przycisk wyslij nieaktywny na poczatku
             //button3.Enabled = false; //przycisk uruchomienia portu wyjściowego nieaktywny póki wejściowy nieuruchomiony
@@ -54,10 +51,9 @@ namespace ClientNode
             // configName = Console.ReadLine();
             //string configName = "klient1.config";
 
-
             //////////////////
 
-             Console.WriteLine("choose client: 1,2,3");
+             Console.WriteLine("Choose client: 1,2");
            
            // Console.Write("Podaj nazwę pliku: ");
              string configname = Console.ReadLine();
@@ -114,13 +110,7 @@ namespace ClientNode
             initializeNode();
             
         }       
-////////////////////
-
-
-
-
 /*
-
             try
             {
                 //Ustawienie parametrów z pliku
@@ -145,16 +135,13 @@ namespace ClientNode
                 //connect = Convert.ToBoolean(text[5]);
                 pIn = new PortIn(idPortIn, portIn, "client");
                 pOut = new PortOut(idPortOut, portOut, tcpPort);
-
-               
+                     
 
             }
             catch { Console.WriteLine(idPortIn+"cos sie zle wczytuje"); }
             */
 
-        
-
-   
+           
         private void initializeNode()
         {
             foreach (Port port in ports.Values)
@@ -249,12 +236,7 @@ namespace ClientNode
         private void comboBox1_Leave_1(object sender, EventArgs e)
         {
             //comboBox1.SelectedIndex = container;
-        }
-
-    
-
-      
-
+        }        
 
         // wysłanie wiadomości gdy klikniemy enter
         private void textBox3_KeyDown(object sender, KeyEventArgs e)
@@ -363,8 +345,7 @@ namespace ClientNode
 
    /*     private void rozłączToolStripMenuItem_Click(object sender, EventArgs e)
         {
-           
-          
+                    
             try
             {
                 richTextBox1.Text += "Rozłaczono połączenie z węzłem sieciowym:\n\n";
@@ -383,9 +364,7 @@ namespace ClientNode
             textBox3.Enabled = false;
           
             
-            //this.Enabled = true;
-           
-            
+            //this.Enabled = true;                    
            
             try
             {
@@ -431,12 +410,12 @@ namespace ClientNode
         //odświeżanie odebrania danych
         private void button3_Click_1(object sender, EventArgs e)
         {
-            /*try
-            {*/
+            try
+            {
                
                 foreach (Port port in ports.Values)
                 {
-                    //List<String> odbierane = p.getData();
+                    
                     Queue odbierane = port.getData();
                     Queue sync_data = Queue.Synchronized(odbierane);
 
@@ -490,7 +469,7 @@ namespace ClientNode
                     {
                         foreach (Message msg in received_messages)
                         {
-                            //Message tempMessage = new Message();
+                            
 
                             if ((msg.dest_component_name == "CLIENT1") || (msg.dest_component_name == "CLIENT2") )
                             {
@@ -501,7 +480,8 @@ namespace ClientNode
                                         case "OK":
                                             if (msg.source_component_name == "NCC")
                                             {
-                                                richTextBox1.Text += "NCC powiedzial OK, moge nadawac\n\n";
+                                                richTextBox1.Text += "NCC powiedzial OK, moge wysylac\n\n";
+                                                
                                                 //button1.Enabled = true;
                                             }
                                             break;
@@ -521,14 +501,12 @@ namespace ClientNode
 
 
                 }
-           /* }
+           }
             catch
             {
                 richTextBox1.Text += "Problem z odebraniem wiadomości:\n\n";
-
-
                 //blad();
-            }*/
+            }
                     
 
         }
@@ -584,27 +562,35 @@ namespace ClientNode
         {
             Message temp_msg = new Message();
             temp_msg.dest_component_name = "NCC";
-            temp_msg.parameters.Add("CALL_REQUEST");
+            temp_msg.parameters.Add("CALL_REQUEST");    //params[0]       
             
-            
-
             if (client_num == 1)
             {
                 temp_msg.source_component_name = "CLIENT2";
                 temp_msg.parameters.Add("CLIENT1");
+                temp_msg.parameters.Add("CLIENT2");
             }
             if (client_num == 2)
             {
                 temp_msg.source_component_name = "CLIENT1";
                 temp_msg.parameters.Add("CLIENT2");
- 
+                temp_msg.parameters.Add("CLIENT1");
+                
             }
             temp_msg.dest_component_name = "NCC";
-            
-
-            temp_msg.parameters.Add("NCC");
+            temp_msg.parameters.Add(liczba_kontenerow);                  
 
             sendcontrolMessage("NCC", temp_msg);
+        }
+
+        private void comboBox4_SelectedIndexChanged(object sender, EventArgs e)
+        {
+             liczba_kontenerow = comboBox4.SelectedIndex;
+            Console.WriteLine(liczba_kontenerow);
+            if (liczba_kontenerow == 0)
+                liczba_kontenerow = 1;
+            if (liczba_kontenerow == 1)
+                liczba_kontenerow = 3;
         }
 
      

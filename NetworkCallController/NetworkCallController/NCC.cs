@@ -21,14 +21,10 @@ namespace NetworkCallController
 {
     public partial class NCC : Form
     {
-        /*public bool isRunning { get; set; }//treba? czy NNC chodzi czy nie.
-        private string myAddress;
-        private Dictionary<string, string> dns;//dns--> wiki. 1string-nazwa dla nas. 2string-adres ip
-        */
         private PC pc;
         private Thread ReceiveThread;
         private PolicyDirectory pd;
-
+        public int CallID;
         private bool canCall;
 
         public static SerializableDictionary<int, Port> int_ports;
@@ -42,7 +38,7 @@ namespace NetworkCallController
 
 
             Win32.AllocConsole();
-            Console.WriteLine("WPISZ 1");
+            Console.WriteLine("Wybierz NCC (wpisz 1)");
 
             // Console.Write("Podaj nazwę pliku: ");
             string configname = Console.ReadLine();
@@ -86,25 +82,19 @@ namespace NetworkCallController
 
             }
 
+            CallID = 0;
             pc = new PC();
             pc.initializePC();
             pd = new PolicyDirectory();
 
             inicjalizacja();
-
-
-            
- 
-           
+                                   
             /*(new Thread(new ThreadStart(() =>
             {
                 Thread.Sleep(100);
                 inicjalizacja();
             }))).Start();*/
-
-
-
-
+            
         }
 
 
@@ -118,22 +108,10 @@ namespace NetworkCallController
             else
             {
                 try
-                {*/
-                    
+                {                                     
 
-                   /* Message tempmsg = new Message();
-                    tempmsg.dest_component_name = "CLIENT1";
-                    tempmsg.source_component_name = "NCC";
-                    tempmsg.parameters.Add("OK");
-                    tempmsg.parameters.Add("CLIENT1");
-                    tempmsg.parameters.Add("NCC");
-
-                    String serialized_message = Serialization.SerializeObject(tempmsg);
-                    int_ports[1].send(serialized_message);*/
-
-
-                    //ReceiveThread = new Thread(new ThreadStart(ReceiveFunction));
-              /*  }
+                     //ReceiveThread = new Thread(new ThreadStart(ReceiveFunction));
+                }
 
                 catch
                 {
@@ -154,11 +132,11 @@ namespace NetworkCallController
         //funkcja skanuje pakiety na wejsciu
         public void ReceiveFunction()
         {
-            /*try
+            try
             {                            
                 
                 while (true)
-                {*/
+                {
                     
                     Queue messages = pc.getData();
                         
@@ -176,19 +154,21 @@ namespace NetworkCallController
                             {
                                     //w sumie tu dodac rozne mozliwosci, tylko nie wiem co jeszcze
                                 case "CALL_REQUEST":
+                                    CallID++;
                                     if (msg.source_component_name == "CLIENT1") 
                                     {
                                         setLogText("Dostalem zadanie polaczenia od" + msg.source_component_name + "\n");
                                         if (askForCall(pd))  // jakies sprawdzenie w PolicyDirectory
                                         {
-                                            
                                             //tu cos sprawdza
                                             tempMessage.dest_component_name = "CC1";
                                             tempMessage.parameters.Add("CONNECTION_REQUEST");//parameters[0]
-                                            tempMessage.parameters.Add(pd.askDirectory("CLIENT1"));  // nizej dla source==CLIENT2 zmieniamy kolejnosc
-                                            tempMessage.parameters.Add(pd.askDirectory("CLIENT2"));                                  
-
-                                           // pc.sendData("CC1", tempMessage);
+                                            tempMessage.parameters.Add(pd.askDirectory("CLIENT1"));  // adres wywolujacego
+                                            tempMessage.parameters.Add(pd.askDirectory("CLIENT2"));   //adres wywolywanego 
+                                            tempMessage.parameters.Add(msg.parameters[3]); //liczba kontenerow
+                                            tempMessage.parameters.Add(CallID);
+                                            // pc.sendData("CC1", tempMessage);
+                                            
                                         }
                                     }
 
@@ -197,13 +177,13 @@ namespace NetworkCallController
                                         setLogText("Dostalem zadanie polaczenia od" + msg.source_component_name + "\n");
                                         if (askForCall(pd))  // jakies sprawdzenie w PolicyDirectory
                                         {
-
                                             //tu cos sprawdza
                                             tempMessage.dest_component_name = "CC1";
                                             tempMessage.parameters.Add("CONNECTION_REQUEST");//parameters[0]
-                                            tempMessage.parameters.Add(pd.askDirectory("CLIENT2"));  // nizej dla source==CLIENT2 zmieniamy kolejnosc
-                                            tempMessage.parameters.Add(pd.askDirectory("CLIENT1"));                                   
-                                                                                        
+                                            tempMessage.parameters.Add(pd.askDirectory("CLIENT2"));  
+                                            tempMessage.parameters.Add(pd.askDirectory("CLIENT1"));
+                                            tempMessage.parameters.Add(msg.parameters[3]); //liczba kontenerow
+                                            tempMessage.parameters.Add(CallID);                                                                                    
                                             // pc.sendData("CC1", tempMessage);
                                         }
                                     }
@@ -224,7 +204,7 @@ namespace NetworkCallController
                                     }   
                                     break;
 
-                                case "CALL_TEARDOWN":                   //rozlaczenie od clienta, nie wiem czy to zrobimy
+                                case "CALL_TEARDOWN":    //rozlaczenie od clienta, nie wiem czy to zrobimy
                                     setLogText("Dostalem zadanie rozlaczenia od" + msg.source_component_name+"\n");    //przy Teardown musi cos sprawzdac u PD?
                                     tempMessage.parameters.Add("CALL_TEARDOWN");
                                     tempMessage.dest_component_name = "CC1";
@@ -248,18 +228,17 @@ namespace NetworkCallController
                         }
                         catch
                         {
-                            setLogText("Cos jest zle przy odczytaniu przychadzacego message\n");
+                            setLogText("Problem przy odczytaniu przychadzacego message\n");
                         }
                     }
-               /* }
+                }
             }
             catch
             {
-               setLogText("Cos jest zle  w Receive function");
-            }*/
+               setLogText("Problem  w Receive function");
+            }
         }
-
-
+        
 
         //funcja ktora bedzie wyswietlala tekst w okienku loga
         delegate void setLogTextCallback(string text);
@@ -309,19 +288,7 @@ namespace NetworkCallController
             
         }
 
-       /* public void send(string src, string dst, string payload)
-        {
-            Packet.SendPacket sendPack = new Packet.SendPacket(src, dst, payload);
-            sendBF.Serialize(networkStream, sendPack);
-
-        }
-
-        public void send(string src, string dst, List<string> payloadList)
-        {
-            Packet.SendPacket sendPack = new Packet.SendPacket(src, dst, payloadList);
-            sendBF.Serialize(networkStream, sendPack);
-        }*/
-   
+        
     }
 
     class Win32
