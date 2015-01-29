@@ -145,7 +145,7 @@ namespace NetworkCallController
                     {
                         
                         Message tempMessage = new Message();
-                        tempMessage.source_component_name = "NCC";
+                        tempMessage.source_component_name = "NCC";//
                         
 
                         try
