@@ -22,7 +22,7 @@ namespace NetworkCallController
     public partial class NCC : Form
     {
         private PC pc;
-        private Thread ReceiveThread;
+        private Thread ReceiveThread;//
         private PolicyDirectory pd;
         public int CallID;
         private bool canCall;
