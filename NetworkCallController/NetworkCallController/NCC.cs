@@ -132,11 +132,11 @@ namespace NetworkCallController
         //funkcja skanuje pakiety na wejsciu
         public void ReceiveFunction()
         {
-            try
+           /* try
             {                            
                 
                 while (true)
-                {
+                {*/
                     
                     Queue messages = pc.getData();
                         
@@ -167,6 +167,7 @@ namespace NetworkCallController
                                             tempMessage.parameters.Add(pd.askDirectory("CLIENT2"));   //adres wywolywanego 
                                             tempMessage.parameters.Add(msg.parameters[3]); //liczba kontenerow
                                             tempMessage.parameters.Add(CallID);
+                                            
                                             // pc.sendData("CC1", tempMessage);
                                             
                                         }
@@ -231,12 +232,12 @@ namespace NetworkCallController
                             setLogText("Problem przy odczytaniu przychadzacego message\n");
                         }
                     }
-                }
+                /*}
             }
             catch
             {
                setLogText("Problem  w Receive function");
-            }
+            }*/
         }
         
 
