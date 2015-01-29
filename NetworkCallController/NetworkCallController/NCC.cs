@@ -161,7 +161,7 @@ namespace NetworkCallController
                                         if (askForCall(pd))  // jakies sprawdzenie w PolicyDirectory
                                         {
                                             //tu cos sprawdza
-                                            tempMessage.dest_component_name = "CC1";
+                                            tempMessage.dest_component_name = "CC1";//
                                             tempMessage.parameters.Add("CONNECTION_REQUEST");//parameters[0]
                                             tempMessage.parameters.Add(pd.askDirectory("CLIENT1"));  // adres wywolujacego
                                             tempMessage.parameters.Add(pd.askDirectory("CLIENT2"));   //adres wywolywanego 
