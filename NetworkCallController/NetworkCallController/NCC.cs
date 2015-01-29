@@ -90,7 +90,7 @@ namespace NetworkCallController
 
                         try
                         {
-                            switch (tempMessage.parameters[0])//zakladam ze w parames[0] bedzie przesylana nazwa message'a
+                            switch (msg.parameters[0])//zakladam ze w parames[0] bedzie przesylana nazwa message'a
                             {
                                     //w sumie tu dodac rozne mozliwosci, tylko nie wiem co jeszcze
                                 case "CALL_REQUEST":
@@ -105,7 +105,7 @@ namespace NetworkCallController
                                             tempMessage.parameters[0] = "CONNECTION_REQUEST";
 
 
-                                            // pc.sendData("CC1", tempMessage);
+                                             pc.sendData("CC1", tempMessage);
                                         }
                                     }
                                                                         
@@ -117,9 +117,9 @@ namespace NetworkCallController
                                         setLogText("CC1 powiedzial ze polaczenie zostalo nawiazane");
                                         tempMessage.parameters[0] = "OK";
                                         tempMessage.dest_component_name = "CLIENT1";
-                                        //pc.sendData("CLIENT1", tempMessage);
+                                        pc.sendData("CLIENT1", tempMessage);
                                         tempMessage.dest_component_name = "CLIENT2";
-                                        //pc.sendData("CLIENT2", tempMessage);
+                                        pc.sendData("CLIENT2", tempMessage);
                                     }   
                                     break;
 
@@ -127,7 +127,7 @@ namespace NetworkCallController
                                     setLogText("Dostalem zadanie rozlaczenia od" + msg.source_component_name);    //przy Teardown musi cos sprawzdac u PD?
                                     tempMessage.parameters[0] = "CALL_TEARDOWN";
                                     tempMessage.dest_component_name = "CC1";
-                                    //pc.sendData("CC1", tempMessage);
+                                    pc.sendData("CC1", tempMessage);
                                       break;
 
                                 case "NO_ESTABLISHED":
@@ -136,9 +136,9 @@ namespace NetworkCallController
                                           setLogText("CC1 powiedzial ze polaczenie jest rozerwane");
                                           tempMessage.parameters[0] = "NO_ESTABLISHED";
                                           tempMessage.dest_component_name = "CLIENT1";
-                                          //pc.sendData("CLIENT1", tempMessage);
+                                          pc.sendData("CLIENT1", tempMessage);
                                           tempMessage.dest_component_name = "CLIENT2";
-                                          //pc.sendData("CLIENT2", tempMessage);
+                                          pc.sendData("CLIENT2", tempMessage);
                                         
                                       }
                                       break;

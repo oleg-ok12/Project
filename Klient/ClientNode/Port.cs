@@ -18,7 +18,7 @@ namespace ClientNode
 
     public enum Data
     {
-       cos,client, characteristic
+       cos,client, characteristic, control
     }
 
 

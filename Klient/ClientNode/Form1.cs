@@ -30,6 +30,7 @@ namespace ClientNode
         string configName;
         private int idNode;
         int data_type;
+        int client_num;
         int? container_number;
 
         /////////////////////////
@@ -56,10 +57,10 @@ namespace ClientNode
 
             //////////////////
 
-             Console.WriteLine("choose client: 1,2,3");
+             //Console.WriteLine("choose client: 1,2,3");
            
            // Console.Write("Podaj nazwę pliku: ");
-             string configname = Console.ReadLine();
+          /*   string configname = Console.ReadLine();
             ports = new Dictionary<int, Port>();
             try
             {
@@ -98,7 +99,7 @@ namespace ClientNode
                 Environment.Exit(0);
 
 
-            }
+            }*/
             initializeNode();
             
         }       
@@ -162,11 +163,17 @@ namespace ClientNode
 
         }
 
-       
+        
+        // wysłanie wiadomości sygnalizacyjnej
 
-      
+        private void sendcontrolMessage(String port_out, Message message)
+        {
+            String serialized_message = Serialization.SerializeObject(message);
 
-       
+            //jakies sprawdzenie dla port_out
+            richTextBox1.Text += "Wysłałem: CALL_REQUEST do NCC\n\n";
+            //port_out.send(serialized_info);
+        }
 
 
         // wysłanie wiadomości
@@ -405,33 +412,100 @@ namespace ClientNode
             rozłączToolStripMenuItem.Enabled = true;
             button1.Enabled = true;   //przycisk wyslij aktywny
         }  */
+        
+        
         //odświeżanie odebrania danych
         private void button3_Click_1(object sender, EventArgs e)
         {
             try
             {
                
-                foreach (Port p in ports.Values)
+                foreach (Port port in ports.Values)
                 {
                     //List<String> odbierane = p.getData();
-                    Queue odbierane = p.getData();
+                    Queue odbierane = port.getData();
                     Queue sync_data = Queue.Synchronized(odbierane);
 
+                    Queue received_messages = new Queue();
+
+                    List<STM1> stm = new List<STM1>();
 
                     if (sync_data.Count > 0)
                     {
-                        foreach (String obj in sync_data)
+                        //dla danych od NCC typu Message
+                        if (port.type_of_receiving_data == Data.control)
+                        {
+                            foreach (String obj in sync_data)
+                            {
+                                Message msg = new Message();
+                                msg = (Message)Serialization.DeserializeObject(obj, typeof(Message));
+                                received_messages.Enqueue(msg);
+                            }
+                        }
+
+                        // Dla danych typu STM1
+                        else if (port.type_of_receiving_data == Data.characteristic)
                         {
 
-                            STM1 odeb = (STM1)Serialization.DeserializeObject(obj, typeof(STM1));
+                            foreach (String obj in sync_data)
+                            {
+
+                                STM1 stm_frame = new STM1();
+                                stm_frame = (STM1)Serialization.DeserializeObject(obj, typeof(STM1));
+                                stm.Add(stm_frame);
+                                                                
+                            }
+                        }
+                    }
+
+                    if (stm.Count > 0)
+                    {
+                        foreach (STM1 odeb in stm)
+                        {
+                            // STM1 odeb = (STM1)Serialization.DeserializeObject(obj, typeof(STM1));
 
                             CharacteristicInformation char_info = odeb.information;
                             ClientInformation client_info = char_info.client_information;
 
-                      
+
                             richTextBox1.Text += "Odebrana Wiadomość:\n" + client_info.text + "\n\n";
                         }
                     }
+
+                    if (received_messages.Count > 0)
+                    {
+                        foreach (Message msg in received_messages)
+                        {
+                            //Message tempMessage = new Message();
+
+                            if ((msg.dest_component_name == "CLIENT1") || (msg.dest_component_name == "CLIENT2") )
+                            {
+                                try
+                                {
+                                    switch (msg.parameters[0])
+                                    {
+                                        case "OK":
+                                            if (msg.source_component_name == "NCC")
+                                            {
+                                                richTextBox1.Text += "NCC powiedzial OK, moge nadawac\n\n";
+                                                //button1.Enabled = true;
+                                            }
+                                            break;
+                                        default: break;
+                                    }
+
+                                }
+                                catch
+                                {
+                                    richTextBox1.Text += "Problem z odebraniem wiadomości: MESSAGE\n\n";
+                                }
+
+                            }
+                                          
+                        }
+                    }
+
+
                 }
             }
             catch
@@ -480,6 +554,38 @@ namespace ClientNode
         {
             container_number = comboBox2.SelectedIndex;
            
+        }
+
+        private void comboBox3_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            client_num = comboBox1.SelectedIndex;
+            Console.WriteLine(client_num);
+            if (client_num == 0)
+                client_num = 1;
+            if (client_num == 1)
+                client_num = 2;
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            Message temp_msg = new Message();
+            temp_msg.dest_component_name = "NCC";
+            temp_msg.parameters[0] = "CALL_REQUEST";
+            temp_msg.parameters[2] = "NCC";
+
+            if (client_num == 1)
+            {
+                temp_msg.source_component_name = "CLIENT1";
+                temp_msg.parameters[1] = "CLIENT1";
+            }
+            if (client_num == 2)
+            {
+                temp_msg.source_component_name = "CLIENT2";
+                temp_msg.parameters[1] = "CLIENT2";
+ 
+            }
+
+            //sendcontrolMessage("NCC", temp_msg);
         }
 
      
