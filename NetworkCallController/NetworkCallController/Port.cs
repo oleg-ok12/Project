@@ -27,7 +27,7 @@ namespace NetworkCallController
         [XmlEnum("control")]            //informacja od NCC
         control = 4
     }
-    class Port
+    public class Port
     {
 
          //public delegate void MediumConnected(object sender, EventArgs e);
@@ -47,7 +47,7 @@ namespace NetworkCallController
 
         public static int port = 40000;
         public static string ip = "localhost";
-        public static string username = "Manager";
+        public static string username = "NCC";
 
         private volatile int errorCounter = 0;
         private volatile bool medConnected = false;

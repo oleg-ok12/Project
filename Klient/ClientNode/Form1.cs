@@ -57,10 +57,10 @@ namespace ClientNode
 
             //////////////////
 
-             //Console.WriteLine("choose client: 1,2,3");
+             Console.WriteLine("choose client: 1,2,3");
            
            // Console.Write("Podaj nazwę pliku: ");
-          /*   string configname = Console.ReadLine();
+           string configname = Console.ReadLine();
             ports = new Dictionary<int, Port>();
             try
             {
@@ -99,7 +99,7 @@ namespace ClientNode
                 Environment.Exit(0);
 
 
-            }*/
+            }
             initializeNode();
             
         }       

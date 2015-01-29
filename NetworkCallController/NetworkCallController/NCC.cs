@@ -30,6 +30,9 @@ namespace NetworkCallController
 
         private bool canCall;
 
+        public Dictionary<int, Port> ports = new Dictionary<int, Port>();
+        private Thread connectThread;
+
         public NCC()
         {
             InitializeComponent();
@@ -37,11 +40,13 @@ namespace NetworkCallController
             pc = new PC();
             pd = new PolicyDirectory();
 
-            (new Thread(new ThreadStart(() =>
+            inicjalizacja();
+
+            /*(new Thread(new ThreadStart(() =>
             {
                 Thread.Sleep(100);
                 inicjalizacja();
-            }))).Start();
+            }))).Start();*/
 
            
             
@@ -60,8 +65,13 @@ namespace NetworkCallController
             {
                 try
                 {
+                    foreach (Port port in ports.Values)
+                    {
 
-                    ReceiveThread = new Thread(new ThreadStart(ReceiveFunction));
+                        connectThread = new Thread(new ParameterizedThreadStart(connectToNetwork));
+                        connectThread.Start(port);
+                    }
+                    //ReceiveThread = new Thread(new ThreadStart(ReceiveFunction));
                 }
 
                 catch
@@ -70,7 +80,16 @@ namespace NetworkCallController
                 }
             }   
         }
-        
+
+
+        private void connectToNetwork(object para)
+        {
+            Port tmp_port = (Port)para;
+            tmp_port.connect();
+
+
+        }
+
         //funkcja skanuje pakiety na wejsciu
         public void ReceiveFunction()
         {
