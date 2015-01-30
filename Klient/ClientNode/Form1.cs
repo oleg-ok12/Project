@@ -91,7 +91,7 @@ namespace ClientNode
                         Data typeofdata = Data.message;
                         Port p = new Port(Convert.ToInt32(interfacesTab[i + 1]), Convert.ToInt32(interfacesTab[i + 2]), typeofdata);
                         ports.Add(Convert.ToInt32(interfacesTab[i]), p);
-                        ports.Add(Convert.ToInt32(interfacesTab[i]) + 1, new Port(Convert.ToInt32(interfacesTab[i + 1]), Convert.ToInt32(interfacesTab[i + 2]) + 1, Data.message));    
+                        //ports.Add(Convert.ToInt32(interfacesTab[i]) + 1, new Port(Convert.ToInt32(interfacesTab[i + 1]), Convert.ToInt32(interfacesTab[i + 2]) + 1, Data.message));    
                         i += 4;
                     }
                     
@@ -500,6 +500,7 @@ namespace ClientNode
                                             {
                                                 richTextBox1.Text += "NCC powiedzial OK, moge wysylac\n\n";
                                                 
+                                                
                                                 //button1.Enabled = true;
                                             }
                                             break;
@@ -625,6 +626,32 @@ namespace ClientNode
 
                 //blad();
             }
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            Message temp_msg = new Message();
+            temp_msg.dest_component_name = "NCC";
+            temp_msg.parameters.Add("CALL_TEARDOWN");    //params[0]       
+
+            if (client_num == 1)
+            {
+                temp_msg.source_component_name = "CLIENT2";
+                temp_msg.parameters.Add("CLIENT1");
+                temp_msg.parameters.Add("CLIENT2");
+            }
+            if (client_num == 2)
+            {
+                temp_msg.source_component_name = "CLIENT1";
+                temp_msg.parameters.Add("CLIENT2");
+                temp_msg.parameters.Add("CLIENT1");
+
+            }
+            temp_msg.dest_component_name = "NCC";
+            //temp_msg.parameters.Add(liczba_kontenerow);
+
+            sendcontrolMessage("NCC", temp_msg);
+
         }
 
 

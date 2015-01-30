@@ -215,8 +215,9 @@ namespace NetworkCallController
                                     break;
 
                                 case "CALL_TEARDOWN":    //rozlaczenie od clienta, nie wiem czy to zrobimy
-                                    setLogText("Dostalem zadanie rozlaczenia od" + msg.source_component_name+"\n");    //przy Teardown musi cos sprawzdac u PD?
-                                    tempMessage.parameters.Add("CALL_TEARDOWN");
+                                    setLogText("Dostalem zadanie rozlaczenia od " + msg.source_component_name+"\n");    //przy Teardown musi cos sprawzdac u PD?
+                                    tempMessage.parameters.Add("CONNECTION_TEARDOWN");
+                                    tempMessage.parameters.Add(CallID);
                                     tempMessage.dest_component_name = "CC1";
                                     pc.sendData("CC1", tempMessage);
                                       break;
