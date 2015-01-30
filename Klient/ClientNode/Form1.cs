@@ -30,6 +30,7 @@ namespace ClientNode
         int data_type;
         int client_num;
         int liczba_kontenerow;
+        int index_kontenerow;
         int? container_number;
 
         /////////////////////////
@@ -499,7 +500,8 @@ namespace ClientNode
                                             if (msg.source_component_name == "NCC")
                                             {
                                                 richTextBox1.Text += "NCC powiedzial OK, moge wysylac\n\n";
-                                                
+                                                richTextBox1.Text += msg.parameters[1] + "\n";
+                                                richTextBox1.Text += msg.parameters[2] + "\n";
                                                 
                                                 //button1.Enabled = true;
                                             }
@@ -604,11 +606,11 @@ namespace ClientNode
 
         private void comboBox4_SelectedIndexChanged(object sender, EventArgs e)
         {
-             liczba_kontenerow = comboBox4.SelectedIndex;
-            Console.WriteLine(liczba_kontenerow);
-            if (liczba_kontenerow == 0)
+             index_kontenerow = comboBox4.SelectedIndex;
+            Console.WriteLine(index_kontenerow);
+            if (index_kontenerow == 0)
                 liczba_kontenerow = 1;
-            if (liczba_kontenerow == 1)
+            if (index_kontenerow == 1)
                 liczba_kontenerow = 3;
         }
 
