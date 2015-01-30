@@ -500,7 +500,8 @@ namespace ClientNode
                                             if (msg.source_component_name == "NCC")
                                             {
                                                 richTextBox1.Text += "NCC powiedzial OK, moge wysylac\n\n";
-                                                
+                                                richTextBox1.Text += msg.parameters[1] + "\n";
+                                                richTextBox1.Text += msg.parameters[2] + "\n";
                                                 
                                                 //button1.Enabled = true;
                                             }

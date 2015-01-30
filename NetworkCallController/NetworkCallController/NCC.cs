@@ -88,6 +88,8 @@ namespace NetworkCallController
             pd = new PolicyDirectory();
 
             inicjalizacja();
+
+            refreshThread();
             /*                       
             (new Thread(new ThreadStart(() =>
             {
@@ -163,22 +165,16 @@ namespace NetworkCallController
                                         if (askForCall(pd))  // jakies sprawdzenie w PolicyDirectory
                                         {
                                             //tu cos sprawdza
-                                            /*tempMessage.dest_component_name = "CC1";
+                                            tempMessage.dest_component_name = "CC1";
                                             tempMessage.parameters.Add("CONNECTION_REQUEST");//parameters[0]
                                             tempMessage.parameters.Add(pd.askDirectory("CLIENT1"));  // adres wywolujacego
                                             tempMessage.parameters.Add(pd.askDirectory("CLIENT2"));   //adres wywolywanego 
                                             tempMessage.parameters.Add(msg.parameters[3]); //liczba kontenerow
-                                            tempMessage.parameters.Add(CallID);*/
-
-                                            tempMessage.dest_component_name = "CLIENT1";
-                                            tempMessage.parameters.Add("OK");//parameters[0]
-                                            //tempMessage.parameters.Add(pd.askDirectory("CLIENT1"));  // adres wywolujacego
-                                            //tempMessage.parameters.Add(pd.askDirectory("CLIENT2"));   //adres wywolywanego 
-                                            tempMessage.parameters.Add(msg.parameters[3]); //liczba kontenerow
                                             tempMessage.parameters.Add(CallID);
-                                            pc.sendData("CLIENT1", tempMessage);
+
                                             
-                                             //pc.sendData("CC1", tempMessage);
+                                            
+                                             pc.sendData("CC1", tempMessage);
                                             
                                         }
                                     }
@@ -266,6 +262,31 @@ namespace NetworkCallController
             else
             {
                 richTextBox_Log.AppendText(text);
+            }
+        }
+
+        delegate void refreshThreadCallBack();
+        public void refreshThread()   //funkcja pokazująca tekst w okienku z logiem
+        {
+            if (this.InvokeRequired)
+            {
+                this.Invoke(new refreshThreadCallBack(refreshThread), new object[] { });
+            }
+            else
+            {
+                Thread thread;
+                thread = new Thread(new ThreadStart(() =>
+                {
+                    while (true)
+                    {
+                        ReceiveFunction();
+                        //TU FUNKCJA ODŚWIEŻ
+                        Thread.Sleep(500);
+                    }
+                }));
+                thread.SetApartmentState(ApartmentState.MTA);
+                thread.IsBackground = true;
+                thread.Start();
             }
         }
 
