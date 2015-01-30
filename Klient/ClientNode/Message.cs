@@ -33,5 +33,17 @@ namespace ClientNode
         }
 
 
+        public Message(string scn, string dcn, List<Object> param)
+        {
+            source_component_name = scn;
+
+            dest_component_name = dcn;
+
+
+            parameters = param;
+
+        }
+
+
     }
 }

@@ -83,6 +83,7 @@ namespace ClientNode
                         Data typeofdata = Data.characteristic;
                         Port p = new Port(Convert.ToInt32(interfacesTab[i + 1]), Convert.ToInt32(interfacesTab[i + 2]), typeofdata);
                         ports.Add(Convert.ToInt32(interfacesTab[i]), p);
+                        
                         i += 4;
                     }
                     if ((Convert.ToInt32(interfacesTab[i + 3])) == 3)
@@ -90,6 +91,7 @@ namespace ClientNode
                         Data typeofdata = Data.message;
                         Port p = new Port(Convert.ToInt32(interfacesTab[i + 1]), Convert.ToInt32(interfacesTab[i + 2]), typeofdata);
                         ports.Add(Convert.ToInt32(interfacesTab[i]), p);
+                        ports.Add(Convert.ToInt32(interfacesTab[i]) + 1, new Port(Convert.ToInt32(interfacesTab[i + 1]), Convert.ToInt32(interfacesTab[i + 2]) + 1, Data.message));    
                         i += 4;
                     }
                     
@@ -232,6 +234,20 @@ namespace ClientNode
             }
         }
 
+        public void sendManager()
+        {
+
+            List<Object> parameters = new List<Object>();
+            parameters.Add(textBox8.Text);
+            parameters.Add(textBox9.Text);
+            parameters.Add(textBox10.Text);
+            parameters.Add(textBox11.Text);
+            parameters.Add(textBox12.Text);
+            Message mes = new Message("1", "1", parameters);
+            String serialized_info = Serialization.SerializeObject(mes);
+            ports[3].send(serialized_info);
+            richTextBox1.Text += "Wysłane rządanie do menadżera o ustawienie matrixa w węźle \n" + textBox8.Text + "\n\n";
+        }
       
 
         //wprowadzenie poprawnej wartości do pola
@@ -595,7 +611,21 @@ namespace ClientNode
                 liczba_kontenerow = 3;
         }
 
-     
+
+        private void button4_Click_1(object sender, EventArgs e)
+        {
+            try
+            {
+                sendManager();
+            }
+            catch
+            {
+                richTextBox1.Text += "Problem z wyslaniem wiadomości:\n\n";
+
+
+                //blad();
+            }
+        }
 
 
     }

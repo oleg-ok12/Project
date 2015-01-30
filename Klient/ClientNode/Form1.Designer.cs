@@ -47,6 +47,18 @@
             this.comboBox3 = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.comboBox4 = new System.Windows.Forms.ComboBox();
+            this.button4 = new System.Windows.Forms.Button();
+            this.textBox12 = new System.Windows.Forms.TextBox();
+            this.textBox11 = new System.Windows.Forms.TextBox();
+            this.label16 = new System.Windows.Forms.Label();
+            this.label15 = new System.Windows.Forms.Label();
+            this.textBox10 = new System.Windows.Forms.TextBox();
+            this.label14 = new System.Windows.Forms.Label();
+            this.label13 = new System.Windows.Forms.Label();
+            this.label12 = new System.Windows.Forms.Label();
+            this.textBox9 = new System.Windows.Forms.TextBox();
+            this.textBox8 = new System.Windows.Forms.TextBox();
+            this.label11 = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -55,7 +67,7 @@
             this.textBox3.Location = new System.Drawing.Point(40, 223);
             this.textBox3.Multiline = true;
             this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(478, 38);
+            this.textBox3.Size = new System.Drawing.Size(744, 38);
             this.textBox3.TabIndex = 27;
             this.textBox3.TextChanged += new System.EventHandler(this.textBox3_TextChanged_1);
             // 
@@ -77,7 +89,7 @@
             this.richTextBox1.Name = "richTextBox1";
             this.richTextBox1.ReadOnly = true;
             this.richTextBox1.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-            this.richTextBox1.Size = new System.Drawing.Size(478, 226);
+            this.richTextBox1.Size = new System.Drawing.Size(744, 226);
             this.richTextBox1.TabIndex = 29;
             this.richTextBox1.Text = "";
             this.richTextBox1.TextChanged += new System.EventHandler(this.richTextBox1_TextChanged_1);
@@ -96,7 +108,7 @@
             // 
             this.toolStrip1.Location = new System.Drawing.Point(0, 24);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(558, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(888, 25);
             this.toolStrip1.TabIndex = 35;
             this.toolStrip1.Text = "toolStrip1";
             this.toolStrip1.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.toolStrip1_ItemClicked_1);
@@ -107,7 +119,7 @@
             this.routerToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(558, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(888, 24);
             this.menuStrip1.TabIndex = 37;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -245,11 +257,122 @@
             this.comboBox4.TabIndex = 51;
             this.comboBox4.SelectedIndexChanged += new System.EventHandler(this.comboBox4_SelectedIndexChanged);
             // 
+            // button4
+            // 
+            this.button4.Location = new System.Drawing.Point(644, 167);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(129, 34);
+            this.button4.TabIndex = 71;
+            this.button4.Text = "Wyślij żądanie";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click_1);
+            // 
+            // textBox12
+            // 
+            this.textBox12.Location = new System.Drawing.Point(708, 134);
+            this.textBox12.Name = "textBox12";
+            this.textBox12.Size = new System.Drawing.Size(76, 20);
+            this.textBox12.TabIndex = 70;
+            // 
+            // textBox11
+            // 
+            this.textBox11.Location = new System.Drawing.Point(609, 134);
+            this.textBox11.Name = "textBox11";
+            this.textBox11.Size = new System.Drawing.Size(72, 20);
+            this.textBox11.TabIndex = 69;
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(705, 118);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(69, 13);
+            this.label16.TabIndex = 68;
+            this.label16.Text = "OutContainer";
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(606, 118);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(61, 13);
+            this.label15.TabIndex = 67;
+            this.label15.Text = "InContainer";
+            // 
+            // textBox10
+            // 
+            this.textBox10.Location = new System.Drawing.Point(745, 89);
+            this.textBox10.Name = "textBox10";
+            this.textBox10.Size = new System.Drawing.Size(58, 20);
+            this.textBox10.TabIndex = 66;
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(751, 73);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(43, 13);
+            this.label14.TabIndex = 65;
+            this.label14.Text = "PortOut";
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(678, 73);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(35, 13);
+            this.label13.TabIndex = 64;
+            this.label13.Text = "PortIn";
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(585, 73);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(44, 13);
+            this.label12.TabIndex = 63;
+            this.label12.Text = "NodeID";
+            // 
+            // textBox9
+            // 
+            this.textBox9.Location = new System.Drawing.Point(663, 89);
+            this.textBox9.Name = "textBox9";
+            this.textBox9.Size = new System.Drawing.Size(67, 20);
+            this.textBox9.TabIndex = 62;
+            // 
+            // textBox8
+            // 
+            this.textBox8.Location = new System.Drawing.Point(566, 89);
+            this.textBox8.Name = "textBox8";
+            this.textBox8.Size = new System.Drawing.Size(74, 20);
+            this.textBox8.TabIndex = 61;
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(612, 52);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(162, 13);
+            this.label11.TabIndex = 60;
+            this.label11.Text = "Wysyłanie żądania do managera";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(558, 579);
+            this.ClientSize = new System.Drawing.Size(888, 579);
+            this.Controls.Add(this.button4);
+            this.Controls.Add(this.textBox12);
+            this.Controls.Add(this.textBox11);
+            this.Controls.Add(this.label16);
+            this.Controls.Add(this.label15);
+            this.Controls.Add(this.textBox10);
+            this.Controls.Add(this.label14);
+            this.Controls.Add(this.label13);
+            this.Controls.Add(this.label12);
+            this.Controls.Add(this.textBox9);
+            this.Controls.Add(this.textBox8);
+            this.Controls.Add(this.label11);
             this.Controls.Add(this.comboBox4);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.comboBox3);
@@ -299,5 +422,17 @@
         private System.Windows.Forms.ComboBox comboBox3;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ComboBox comboBox4;
+        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.TextBox textBox12;
+        private System.Windows.Forms.TextBox textBox11;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.TextBox textBox10;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.TextBox textBox9;
+        private System.Windows.Forms.TextBox textBox8;
+        private System.Windows.Forms.Label label11;
     }
 }
