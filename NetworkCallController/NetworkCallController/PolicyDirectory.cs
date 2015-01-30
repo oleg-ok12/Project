@@ -40,6 +40,8 @@ namespace NetworkCallController
                slownik_adresow.Add("CLIENT2", client2);
                return client2;
            }
+           
+           
            return pusta;
        }
         
