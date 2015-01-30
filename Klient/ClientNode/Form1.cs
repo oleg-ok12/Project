@@ -419,7 +419,7 @@ namespace ClientNode
                 {
                     
                     Queue odbierane = port.getData();
-                    Queue sync_data = Queue.Synchronized(odbierane);
+                    Queue sync_data = Queue.Synchronized(odbierane);//
 
                     Queue received_messages = new Queue();
 
