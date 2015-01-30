@@ -113,6 +113,7 @@ namespace ClientNode
             }
             
             initializeNode();
+           refreshThread();
             
         }       
 /*
@@ -174,7 +175,7 @@ namespace ClientNode
             String serialized_message = Serialization.SerializeObject(message);
 
             //jakies sprawdzenie dla port_out
-            richTextBox1.Text += "Wysłałem: CALL_REQUEST do NCC\n\n";
+            setLogText("Wysłałem: CALL_REQUEST do NCC\n\n");
             if (port_out == "NCC")
             {
                 ports[2].send(serialized_message);
@@ -225,13 +226,13 @@ namespace ClientNode
                 
 
 
-                richTextBox1.Text += "Wysłana Wiadomość:\n" + textBox3.Text + "\n\n";
+                setLogText("Wysłana Wiadomość:\n" + textBox3.Text + "\n\n");
                 
                 textBox3.Clear();
             }
             catch
             {
-                richTextBox1.Text += "Błąd Podczas Wysyłania Wiadomości\n\n";
+                setLogText("Błąd Podczas Wysyłania Wiadomości\n\n");
             }
         }
 
@@ -247,7 +248,7 @@ namespace ClientNode
             Message mes = new Message("1", "1", parameters);
             String serialized_info = Serialization.SerializeObject(mes);
             ports[3].send(serialized_info);
-            richTextBox1.Text += "Wysłane rządanie do menadżera o ustawienie matrixa w węźle \n" + textBox8.Text + "\n\n";
+            setLogText("Wysłane rządanie do menadżera o ustawienie matrixa w węźle \n" + textBox8.Text + "\n\n");
         }
       
 
@@ -429,12 +430,19 @@ namespace ClientNode
         //odświeżanie odebrania danych
         private void button3_Click_1(object sender, EventArgs e)
         {
+
+            ReceiveFunction();   
+
+        }
+
+        public void ReceiveFunction()
+        {
             try
             {
-               
+
                 foreach (Port port in ports.Values)
                 {
-                    
+
                     Queue odbierane = port.getData();
                     Queue sync_data = Queue.Synchronized(odbierane);//
 
@@ -465,7 +473,7 @@ namespace ClientNode
                                 STM1 stm_frame = new STM1();
                                 stm_frame = (STM1)Serialization.DeserializeObject(obj, typeof(STM1));
                                 stm.Add(stm_frame);
-                                                                
+
                             }
                         }
                     }
@@ -480,7 +488,7 @@ namespace ClientNode
                             ClientInformation client_info = char_info.client_information;
 
 
-                            richTextBox1.Text += "Odebrana Wiadomość:\n" + client_info.text + "\n\n";
+                            setLogText("Odebrana Wiadomość:\n" + client_info.text + "\n\n");
                         }
                     }
 
@@ -488,9 +496,9 @@ namespace ClientNode
                     {
                         foreach (Message msg in received_messages)
                         {
-                            
 
-                            if ((msg.dest_component_name == "CLIENT1") || (msg.dest_component_name == "CLIENT2") )
+
+                            if ((msg.dest_component_name == "CLIENT1") || (msg.dest_component_name == "CLIENT2"))
                             {
                                 try
                                 {
@@ -499,10 +507,9 @@ namespace ClientNode
                                         case "OK":
                                             if (msg.source_component_name == "NCC")
                                             {
-                                                richTextBox1.Text += "NCC powiedzial OK, moge wysylac\n\n";
-                                                richTextBox1.Text += msg.parameters[1] + "\n";
-                                                richTextBox1.Text += msg.parameters[2] + "\n";
+                                                setLogText("NCC powiedzial OK, moge wysylac\n\n");
                                                 
+
                                                 //button1.Enabled = true;
                                             }
                                             break;
@@ -512,24 +519,22 @@ namespace ClientNode
                                 }
                                 catch
                                 {
-                                    richTextBox1.Text += "Problem z odebraniem wiadomości: MESSAGE\n\n";
+                                    setLogText("Problem z odebraniem wiadomości: MESSAGE\n\n");
                                 }
 
                             }
-                                          
+
                         }
                     }
 
 
                 }
-           }
+            }
             catch
             {
-                richTextBox1.Text += "Problem z odebraniem wiadomości:\n\n";
+                setLogText("Problem z odebraniem wiadomości:\n\n");
                 //blad();
             }
-                    
-
         }
 
         private void label2_Click(object sender, EventArgs e)
@@ -623,7 +628,7 @@ namespace ClientNode
             }
             catch
             {
-                richTextBox1.Text += "Problem z wyslaniem wiadomości:\n\n";
+                setLogText("Problem z wyslaniem wiadomości:\n\n");
 
 
                 //blad();
@@ -654,6 +659,45 @@ namespace ClientNode
 
             sendcontrolMessage("NCC", temp_msg);
 
+        }
+
+        delegate void refreshThreadCallBack();
+        public void refreshThread()   //funkcja pokazująca tekst w okienku z logiem
+        {
+            if (this.InvokeRequired)
+            {
+                this.Invoke(new refreshThreadCallBack(refreshThread), new object[] { });
+            }
+            else
+            {
+                Thread thread;
+                thread = new Thread(new ThreadStart(() =>
+                {
+                    while (true)
+                    {
+                        ReceiveFunction();
+                        //TU FUNKCJA ODŚWIEŻ
+                        Thread.Sleep(500);
+                    }
+                }));
+                thread.SetApartmentState(ApartmentState.MTA);
+                thread.IsBackground = true;
+                thread.Start();
+            }
+        }
+
+        //funcja ktora bedzie wyswietlala tekst w okienku loga
+        delegate void setLogTextCallback(string text);
+        public void setLogText(string text)
+        {
+            if (this.InvokeRequired)
+            {
+                this.Invoke(new setLogTextCallback(setLogText), new object[] { text });
+            }
+            else
+            {
+                richTextBox1.AppendText(text);
+            }
         }
 
 
