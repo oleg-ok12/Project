@@ -30,8 +30,6 @@
         {
             this.labIP = new System.Windows.Forms.Label();
             this.labPort = new System.Windows.Forms.Label();
-            this.textBoxIP = new System.Windows.Forms.TextBox();
-            this.textBoxPort = new System.Windows.Forms.TextBox();
             this.butConn = new System.Windows.Forms.Button();
             this.butClear = new System.Windows.Forms.Button();
             this.richTextBox_Log = new System.Windows.Forms.RichTextBox();
@@ -55,22 +53,6 @@
             this.labPort.Size = new System.Drawing.Size(26, 13);
             this.labPort.TabIndex = 1;
             this.labPort.Text = "Port";
-            // 
-            // textBoxIP
-            // 
-            this.textBoxIP.Location = new System.Drawing.Point(32, 37);
-            this.textBoxIP.Name = "textBoxIP";
-            this.textBoxIP.Size = new System.Drawing.Size(100, 20);
-            this.textBoxIP.TabIndex = 2;
-            this.textBoxIP.Text = "127.0.0.1";
-            // 
-            // textBoxPort
-            // 
-            this.textBoxPort.Location = new System.Drawing.Point(32, 98);
-            this.textBoxPort.Name = "textBoxPort";
-            this.textBoxPort.Size = new System.Drawing.Size(100, 20);
-            this.textBoxPort.TabIndex = 3;
-            this.textBoxPort.Text = "14000";
             // 
             // butConn
             // 
@@ -118,8 +100,6 @@
             this.Controls.Add(this.richTextBox_Log);
             this.Controls.Add(this.butClear);
             this.Controls.Add(this.butConn);
-            this.Controls.Add(this.textBoxPort);
-            this.Controls.Add(this.textBoxIP);
             this.Controls.Add(this.labPort);
             this.Controls.Add(this.labIP);
             this.Name = "NCC";
@@ -133,8 +113,6 @@
 
         private System.Windows.Forms.Label labIP;
         private System.Windows.Forms.Label labPort;
-        private System.Windows.Forms.TextBox textBoxIP;
-        private System.Windows.Forms.TextBox textBoxPort;
         private System.Windows.Forms.Button butConn;
         private System.Windows.Forms.Button butClear;
         private System.Windows.Forms.RichTextBox richTextBox_Log;
