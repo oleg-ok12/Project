@@ -165,8 +165,17 @@ namespace NetworkCallController
                                         setLogText("Dostalem "+(String)msg.parameters[0]+ "od " + msg.source_component_name + "\n");
                                         if (askForCall(pd))  // jakies sprawdzenie w PolicyDirectory
                                         {
+                                            //NCC wysyla klientowi Call ID
+                                            tempMessage.dest_component_name = "CLIENT1";
+                                            tempMessage.parameters.Clear();
+                                            tempMessage.parameters.Add("CALL_ID");
+                                            tempMessage.parameters.Add(CallID);
+                                            pc.sendData("CLIENT1", tempMessage);
+                                            setLogText("Wyslalem: " + tempMessage.parameters[0] + " do " + tempMessage.dest_component_name + "\n");
+                                            
                                             //tu cos sprawdza
                                             tempMessage.dest_component_name = "CC1";
+                                            tempMessage.parameters.Clear();
                                             tempMessage.parameters.Add("CONNECTION_REQUEST");//parameters[0]
                                             tempMessage.parameters.Add(pd.askDirectory("CLIENT1"));  // adres wywolujacego
                                             tempMessage.parameters.Add(pd.askDirectory("CLIENT2"));   //adres wywolywanego 
@@ -185,18 +194,26 @@ namespace NetworkCallController
                                         setLogText("Dostalem " + (String)msg.parameters[0] + "od " + msg.source_component_name + "\n");
                                         if (askForCall(pd))  // jakies sprawdzenie w PolicyDirectory
                                         {
+                                            //NCC wysyla klientowi Call ID
+                                            tempMessage.dest_component_name = "CLIENT2";
+                                            tempMessage.parameters.Clear();
+                                            tempMessage.parameters.Add("CALL_ID");
+                                            tempMessage.parameters.Add(CallID);
+                                            pc.sendData("CLIENT1", tempMessage);
+                                            setLogText("Wyslalem: " + tempMessage.parameters[0] + " do " + tempMessage.dest_component_name + "\n");
+                                            
                                             //tu cos sprawdza
                                             tempMessage.dest_component_name = "CC1";
+                                            tempMessage.parameters.Clear();
                                             tempMessage.parameters.Add("CONNECTION_REQUEST");//parameters[0]
                                             tempMessage.parameters.Add(pd.askDirectory("CLIENT2"));  
                                             tempMessage.parameters.Add(pd.askDirectory("CLIENT1"));
                                             tempMessage.parameters.Add(msg.parameters[3]); //liczba kontenerow
                                             tempMessage.parameters.Add(CallID);  
 
-                                                                            
-
                                              pc.sendData("CC1", tempMessage);
                                              setLogText("Wyslalem: " + tempMessage.parameters[0] + " do " + tempMessage.dest_component_name + "\n");
+  
                                         }
                                     }
                                         

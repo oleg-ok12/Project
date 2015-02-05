@@ -34,6 +34,7 @@ namespace ClientNode
         int? container_number;
 
         public string myClientId;
+        Queue<string> listaCallID = new Queue<string>();
         /////////////////////////
         public Dictionary<int, Port> ports = new Dictionary<int, Port>();
         private Thread connectThread;
@@ -513,10 +514,21 @@ namespace ClientNode
                                         case "OK":
                                             if (msg.source_component_name == "NCC")
                                             {
-                                                setLogText("NCC powiedzial OK, moge wysylac\n\n");//
+                                                setLogText("NCC powiedzial OK, moge wysylac\n\n");
                                                 
 
                                                 //button1.Enabled = true;
+                                            }
+                                            break;
+
+                                        case "CALL_ID":
+                                            if (msg.source_component_name == "NCC")
+                                            {
+                                                setLogText("Dostalem od NCC CALL_ID : "+msg.parameters[1]+"\n");
+                                                //listaCallID((String)msg.parameters[1]);
+
+                                                //updateCallIDList();
+                                                                                               
                                             }
                                             break;
                                         default: break;
@@ -586,7 +598,7 @@ namespace ClientNode
             Console.WriteLine(client_num);
             if (client_num == 0)
                 client_num = 1;
-            if (client_num == 1)
+            else if (client_num == 1)
                 client_num = 2;
         }
 
@@ -621,7 +633,7 @@ namespace ClientNode
             Console.WriteLine(index_kontenerow);
             if (index_kontenerow == 0)
                 liczba_kontenerow = 1;
-            if (index_kontenerow == 1)
+            else if (index_kontenerow == 1)
                 liczba_kontenerow = 3;
         }
 
@@ -711,6 +723,21 @@ namespace ClientNode
             }
         }
 
+        //funcja ktora bedzie uaktualnia liste Call Id
+        delegate void updateCallIDListCallback();
+        public void updateCallIDList()
+        {
+            if (this.InvokeRequired)
+            {
+                this.Invoke(new updateCallIDListCallback(updateCallIDList), new object[] { });
+            }
+            else
+            {
+                callId_comboBox.Items.Add(listaCallID);
+
+
+            }
+        }
 
     }
 
