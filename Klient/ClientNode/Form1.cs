@@ -531,6 +531,21 @@ namespace ClientNode
                                                                                                
                                             }
                                             break;
+
+                                        case "CALL_REQUEST":
+                                            setLogText("Dostalem CALL_REQUEST od : " + msg.source_component_name + "\n + Połączenie zaakceptowane.");
+
+                                            msg.parameters[0] = "CALL_ACCEPT";
+
+                                            msg.source_component_name = msg.dest_component_name;
+                                            msg.dest_component_name = "NCC";
+
+                                            String serialized_message = Serialization.SerializeObject(msg);
+
+                                            ports[2].send(serialized_message);
+                                            
+                                            break;
+
                                         default: break;
                                     }
 
@@ -677,9 +692,10 @@ namespace ClientNode
             temp_msg.dest_component_name = "NCC";
             temp_msg.parameters.Add(callId_comboBox.SelectedItem.ToString());//params[3]
             
+            
             sendcontrolMessage("NCC", temp_msg);
             setLogText("Wyslalem " + temp_msg.parameters[0] + " do " + temp_msg.dest_component_name + " ,CALL_ID : " + callId_comboBox.SelectedItem.ToString());
-
+            callId_comboBox.Items.RemoveAt(callId_comboBox.SelectedIndex);
         }
 
         delegate void refreshThreadCallBack();

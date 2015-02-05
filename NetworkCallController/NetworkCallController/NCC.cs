@@ -162,28 +162,22 @@ namespace NetworkCallController
                                     CallID++;
                                     if (msg.source_component_name == "CLIENT1") 
                                     {
-                                        setLogText("Dostalem "+(String)msg.parameters[0]+ "od " + msg.source_component_name + "\n");
+                                        setLogText("Dostalem "+(String)msg.parameters[0]+ " od " + msg.source_component_name + "\n");
                                         if (askForCall(pd))  // jakies sprawdzenie w PolicyDirectory
                                         {
-                                            //NCC wysyla klientowi Call ID
-                                            tempMessage.dest_component_name = "CLIENT1";
-                                            tempMessage.parameters.Clear();
-                                            tempMessage.parameters.Add("CALL_ID");
-                                            tempMessage.parameters.Add(CallID);
-                                            pc.sendData("CLIENT1", tempMessage);
-                                            setLogText("Wyslalem: " + tempMessage.parameters[0] + " do " + tempMessage.dest_component_name + "\n");
                                             
-                                            //tu cos sprawdza
-                                            tempMessage.dest_component_name = "CC1";
+                                            
+                                            tempMessage.dest_component_name = "CLIENT2";
+                                            tempMessage.source_component_name = "CLIENT1";
                                             tempMessage.parameters.Clear();
-                                            tempMessage.parameters.Add("CONNECTION_REQUEST");//parameters[0]
+                                            tempMessage.parameters.Add("CALL_REQUEST");//parameters[0]
                                             tempMessage.parameters.Add(pd.askDirectory("CLIENT1"));  // adres wywolujacego
                                             tempMessage.parameters.Add(pd.askDirectory("CLIENT2"));   //adres wywolywanego 
                                             tempMessage.parameters.Add(msg.parameters[3]); //liczba kontenerow
                                             tempMessage.parameters.Add(CallID);
 
                                             
-                                             pc.sendData("CC1", tempMessage);//
+                                             pc.sendData("CLIENT2", tempMessage);//
                                              setLogText("Wyslalem: " + tempMessage.parameters[0]+" do "+tempMessage.dest_component_name+ "\n");
                                             
                                         }
@@ -191,27 +185,21 @@ namespace NetworkCallController
 
                                     if (msg.source_component_name == "CLIENT2")
                                     {
-                                        setLogText("Dostalem " + (String)msg.parameters[0] + "od " + msg.source_component_name + "\n");
+                                        setLogText("Dostalem " + (String)msg.parameters[0] + " od " + msg.source_component_name + "\n");
                                         if (askForCall(pd))  // jakies sprawdzenie w PolicyDirectory
                                         {
-                                            //NCC wysyla klientowi Call ID
-                                            tempMessage.dest_component_name = "CLIENT2";
-                                            tempMessage.parameters.Clear();
-                                            tempMessage.parameters.Add("CALL_ID");
-                                            tempMessage.parameters.Add(CallID);
-                                            pc.sendData("CLIENT1", tempMessage);
-                                            setLogText("Wyslalem: " + tempMessage.parameters[0] + " do " + tempMessage.dest_component_name + "\n");
                                             
                                             //tu cos sprawdza
-                                            tempMessage.dest_component_name = "CC1";
+                                            tempMessage.dest_component_name = "CLIENT1";
+                                            tempMessage.source_component_name = "CLIENT2";
                                             tempMessage.parameters.Clear();
-                                            tempMessage.parameters.Add("CONNECTION_REQUEST");//parameters[0]
+                                            tempMessage.parameters.Add("CALL_REQUEST");//parameters[0]
                                             tempMessage.parameters.Add(pd.askDirectory("CLIENT2"));  
                                             tempMessage.parameters.Add(pd.askDirectory("CLIENT1"));
                                             tempMessage.parameters.Add(msg.parameters[3]); //liczba kontenerow
                                             tempMessage.parameters.Add(CallID);  
 
-                                             pc.sendData("CC1", tempMessage);
+                                             pc.sendData("CLIENT1", tempMessage);
                                              setLogText("Wyslalem: " + tempMessage.parameters[0] + " do " + tempMessage.dest_component_name + "\n");
   
                                         }
@@ -221,11 +209,50 @@ namespace NetworkCallController
 
                                     break;
 
-                                case "ESTABLISHED":
+
+                                case "CALL_ACCEPT":
+                                    setLogText("Dostalem " + (String)msg.parameters[0] + " od " + msg.source_component_name + "\n");
+
+                                    msg.dest_component_name = "CC";
+                                    msg.parameters[0] = "CONNECTION_REQUEST";
+
+                                    if (msg.source_component_name == "CLIENT1")
+                                    {
+                                        //NCC wysyla klientowi Call ID
+                                        tempMessage.dest_component_name = "CLIENT2";
+                                        tempMessage.parameters.Clear();
+                                        tempMessage.parameters.Add("CALL_ID");
+                                        tempMessage.parameters.Add(CallID);
+                                        pc.sendData("CLIENT2", tempMessage);
+                                        setLogText("Wyslalem: " + tempMessage.parameters[0] + " do " + tempMessage.dest_component_name + "\n");
+                                            
+ 
+                                    }
+                                    if (msg.source_component_name == "CLIENT2")
+                                    {
+                                        //NCC wysyla klientowi Call ID
+                                        tempMessage.dest_component_name = "CLIENT1";
+                                        tempMessage.parameters.Clear();
+                                        tempMessage.parameters.Add("CALL_ID");
+                                        tempMessage.parameters.Add(CallID);
+                                        pc.sendData("CLIENT1", tempMessage);
+                                        setLogText("Wyslalem: " + tempMessage.parameters[0] + " do " + tempMessage.dest_component_name + "\n");
+                                            
+                                    }
+                                    
+
+
+                                    pc.sendData("CC", msg);
+                                    
+                                    setLogText("Wyslalem: " + msg.parameters[0] + " do " + msg.dest_component_name + "\n");
+
+                                    break;
+
+                                case "CONNECTION_CONFIRM":
                                     setLogText("Dostalem " + (String)msg.parameters[0] + "od " + msg.source_component_name + "\n");
                                     if (msg.source_component_name == "CC1")
                                     {
-                                        setLogText("CC1 powiedzial ze polaczenie zostalo nawiazane\n");
+                                        
                                         tempMessage.parameters.Add("OK");
                                         tempMessage.dest_component_name = "CLIENT1";
                                         pc.sendData("CLIENT1", tempMessage);
