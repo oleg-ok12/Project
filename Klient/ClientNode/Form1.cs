@@ -507,7 +507,7 @@ namespace ClientNode
                                         case "OK":
                                             if (msg.source_component_name == "NCC")
                                             {
-                                                setLogText("NCC powiedzial OK, moge wysylac\n\n");
+                                                setLogText("NCC powiedzial OK, moge wysylac\n\n");//
                                                 
 
                                                 //button1.Enabled = true;
