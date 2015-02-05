@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
+
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
@@ -41,7 +43,7 @@ namespace NetworkCallController
 
 
         //private List<String> received_data = new List<string>(); //dana które zostały odebrane, ale jeszcze nie przetworzone przez pole komutacyjne
-        private Queue received_data = new Queue();
+        private ConcurrentQueue<string> received_data = new ConcurrentQueue<string>();
 
         public Data type_of_receiving_data;
 
@@ -64,7 +66,7 @@ namespace NetworkCallController
             router_ID = routerID;
             this.port_ID = portID;
             type_of_receiving_data = type_of_data;
-            received_data = new Queue();
+            
 
         }
 
@@ -262,14 +264,16 @@ namespace NetworkCallController
             {
                 foreach (String info in received_data)
                 {
-                    tmp_queue.Enqueue(info);
+
+                    //tmp_queue.Enqueue(info);
+                    String temp;
+                    if (received_data.TryDequeue(out temp))
+                        tmp_queue.Enqueue(temp);
                 }
             }
 
             //int remove = Math.Max(0, received_data.Count);
             //received_data.RemoveRange(0, remove);
-
-            received_data.Clear();
 
             return tmp_queue;
 

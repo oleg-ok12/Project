@@ -15,7 +15,7 @@ namespace NetworkCallController
 
         private Thread connectThread;
 
-
+        private List<Queue> que_list = new List<Queue>();
         private Queue data;
         private Queue sync_data;
 
@@ -43,13 +43,14 @@ namespace NetworkCallController
         }
 
 
-        public Queue getData()
+        public List<Queue> getData()
         {
-            Queue received_messages = new Queue();
-            Queue messages = new Queue();
+            que_list.Clear();
 
             foreach (Port port in NCC.int_ports.Values)
             {
+
+                Queue received_messages = new Queue();
                 sync_data = port.getData();
 
 
@@ -62,6 +63,8 @@ namespace NetworkCallController
                         msg = (Message)Serialization.DeserializeObject(str, typeof(Message));
                         received_messages.Enqueue(msg);
                     }
+
+                    que_list.Add(received_messages);
                 }
                 else
                 {
@@ -69,7 +72,7 @@ namespace NetworkCallController
                 }
             }
 
-            return received_messages;
+            return que_list;
         }
 
         public void sendData(String port_out, Message message) //należy podać nazwę, np. CC1, 

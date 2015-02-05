@@ -142,10 +142,11 @@ namespace NetworkCallController
                 /*while (true)
                 {*/
                     
-                    Queue messages = pc.getData();
+                    List<Queue> messages = pc.getData();
                         
-
-                    foreach (Message msg in messages)
+                    foreach(Queue queue in messages)
+                    { 
+                    foreach (Message msg in queue)
                     {
                         
                         Message tempMessage = new Message();
@@ -248,7 +249,7 @@ namespace NetworkCallController
                             setLogText("Problem przy odczytaniu przychadzacego message\n");
                         }
                     }
-                //}
+                }
             }
             catch
             {
