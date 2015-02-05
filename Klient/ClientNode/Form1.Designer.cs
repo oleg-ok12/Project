@@ -376,6 +376,7 @@
             this.callId_comboBox.Name = "callId_comboBox";
             this.callId_comboBox.Size = new System.Drawing.Size(121, 21);
             this.callId_comboBox.TabIndex = 73;
+            this.callId_comboBox.SelectedIndexChanged += new System.EventHandler(this.callId_comboBox_SelectedIndexChanged);
             // 
             // Form1
             // 

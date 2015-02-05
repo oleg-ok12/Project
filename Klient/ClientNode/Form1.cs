@@ -34,7 +34,7 @@ namespace ClientNode
         int? container_number;
 
         public string myClientId;
-        Queue<string> listaCallID = new Queue<string>();
+        List<object> listaCallID = new List<object>();
         /////////////////////////
         public Dictionary<int, Port> ports = new Dictionary<int, Port>();
         private Thread connectThread;
@@ -182,7 +182,7 @@ namespace ClientNode
             String serialized_message = Serialization.SerializeObject(message);
 
             //jakies sprawdzenie dla port_out
-            setLogText("Wysłałem: CALL_REQUEST do NCC\n\n");
+            
             if (port_out == "NCC")
             {
                 ports[2].send(serialized_message);
@@ -525,9 +525,9 @@ namespace ClientNode
                                             if (msg.source_component_name == "NCC")
                                             {
                                                 setLogText("Dostalem od NCC CALL_ID : "+msg.parameters[1]+"\n");
-                                                //listaCallID((String)msg.parameters[1]);
+                                                listaCallID.Add(msg.parameters[1]);
 
-                                                //updateCallIDList();
+                                                updateCallIDList();
                                                                                                
                                             }
                                             break;
@@ -625,6 +625,7 @@ namespace ClientNode
             temp_msg.parameters.Add(liczba_kontenerow);                  
 
             sendcontrolMessage("NCC", temp_msg);
+            setLogText("Wyslalem " + temp_msg.parameters[0] + " do " + temp_msg.dest_component_name);
         }
 
         private void comboBox4_SelectedIndexChanged(object sender, EventArgs e)
@@ -657,25 +658,27 @@ namespace ClientNode
         {
             Message temp_msg = new Message();
             temp_msg.dest_component_name = "NCC";
+            temp_msg.parameters.Clear();
             temp_msg.parameters.Add("CALL_TEARDOWN");    //params[0]       
 
             if (client_num == 1)
             {
                 temp_msg.source_component_name = "CLIENT2";
-                temp_msg.parameters.Add("CLIENT1");
-                temp_msg.parameters.Add("CLIENT2");
+                temp_msg.parameters.Add("CLIENT1");//params[1]
+                temp_msg.parameters.Add("CLIENT2");//params[2]
             }
-            if (client_num == 2)
+            else if (client_num == 2)
             {
                 temp_msg.source_component_name = "CLIENT1";
-                temp_msg.parameters.Add("CLIENT2");
-                temp_msg.parameters.Add("CLIENT1");
+                temp_msg.parameters.Add("CLIENT2");//params[1]
+                temp_msg.parameters.Add("CLIENT1");//params[2]
 
             }
             temp_msg.dest_component_name = "NCC";
-            //temp_msg.parameters.Add(liczba_kontenerow);
-
+            temp_msg.parameters.Add(callId_comboBox.SelectedItem.ToString());//params[3]
+            
             sendcontrolMessage("NCC", temp_msg);
+            setLogText("Wyslalem " + temp_msg.parameters[0] + " do " + temp_msg.dest_component_name + " ,CALL_ID : " + callId_comboBox.SelectedItem.ToString());
 
         }
 
@@ -733,10 +736,18 @@ namespace ClientNode
             }
             else
             {
-                callId_comboBox.Items.Add(listaCallID);
-
+                callId_comboBox.Items.Clear();
+                for (int i = 0; i < listaCallID.Count; i++)
+                {
+                    callId_comboBox.Items.Add(listaCallID[i]);
+                }
 
             }
+        }
+
+        private void callId_comboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
 
     }
