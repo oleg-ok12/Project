@@ -152,7 +152,7 @@
             // 
             // textBox7
             // 
-            this.textBox7.Location = new System.Drawing.Point(397, 46);
+            this.textBox7.Location = new System.Drawing.Point(105, 43);
             this.textBox7.Name = "textBox7";
             this.textBox7.ReadOnly = true;
             this.textBox7.Size = new System.Drawing.Size(121, 20);
@@ -162,11 +162,11 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(314, 52);
+            this.label3.Location = new System.Drawing.Point(48, 46);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(67, 13);
+            this.label3.Size = new System.Drawing.Size(51, 13);
             this.label3.TabIndex = 43;
-            this.label3.Text = "My ID Node:";
+            this.label3.Text = "CLIENT :";
             // 
             // label9
             // 

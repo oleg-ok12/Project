@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace NetworkCallController
 {
     class PolicyDirectory
@@ -30,6 +31,7 @@ namespace NetworkCallController
                client1.Add(0);
                client1.Add(1);
                slownik_adresow.Add("CLIENT1", client1);
+               
                return client1;
            }
            else if (nazwa_klienta == "CLIENT2")
@@ -38,6 +40,7 @@ namespace NetworkCallController
                client2.Add(0);
                client2.Add(2);
                slownik_adresow.Add("CLIENT2", client2);
+               
                return client2;
            }
            

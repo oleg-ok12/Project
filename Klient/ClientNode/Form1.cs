@@ -33,6 +33,7 @@ namespace ClientNode
         int index_kontenerow;
         int? container_number;
 
+        public string myClientId;
         /////////////////////////
         public Dictionary<int, Port> ports = new Dictionary<int, Port>();
         private Thread connectThread;
@@ -100,6 +101,9 @@ namespace ClientNode
                 //Console.WriteLine(ports[45].getPortID());
                 //Console.WriteLine(ports[52].getNodeID());
                 textBox7.Text = interfacesTab[1];
+                
+                
+                
             }
             catch
             {
@@ -150,6 +154,8 @@ namespace ClientNode
            
         private void initializeNode()
         {
+            
+
             foreach (Port port in ports.Values)
             {
 
@@ -696,7 +702,12 @@ namespace ClientNode
             }
             else
             {
-                richTextBox1.AppendText(text);
+                if (text.ElementAt(text.Length - 1) != '\n')    //jak jest enter na końcu tego tekstu to spoko, jak nie to dodaj
+                    richTextBox1.AppendText(DateTime.Now.ToString(@"h\:mm\:ss tt") + ": " + text + "\n");
+                else richTextBox1.AppendText(DateTime.Now.ToString(@"h\:mm\:ss tt") + ": " + text);
+                richTextBox1.ScrollToCaret();  //przewiń boxa z tekstem do karetki 
+            
+                
             }
         }
 
