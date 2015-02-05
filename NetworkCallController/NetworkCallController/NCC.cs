@@ -252,31 +252,34 @@ namespace NetworkCallController
                                     setLogText("Dostalem " + (String)msg.parameters[0] + "od " + msg.source_component_name + "\n");
                                     if (msg.source_component_name == "CC1")
                                     {
-                                        
-                                        tempMessage.parameters.Add("OK");
+
+                                        tempMessage.parameters.Add("CONNECTION_CONFIRM");
                                         tempMessage.dest_component_name = "CLIENT1";
                                         pc.sendData("CLIENT1", tempMessage);
+                                        setLogText("Wyslalem: " + tempMessage.parameters[0] + " do " + tempMessage.dest_component_name + "\n");
                                         tempMessage.dest_component_name = "CLIENT2";
                                         pc.sendData("CLIENT2", tempMessage);
+                                        setLogText("Wyslalem: " + tempMessage.parameters[0] + " do " + tempMessage.dest_component_name + "\n");
                                     }   
                                     break;
 
                                 case "CALL_TEARDOWN":    //rozlaczenie od clienta, nie wiem czy to zrobimy
                                     setLogText("Dostalem "+(String)msg.parameters[0]+ " od " + msg.source_component_name + "\n");   //przy Teardown musi cos sprawzdac u PD?
                                     setLogText("Dostalem CALL_ID " + (String)msg.parameters[3] );
+                                    tempMessage.parameters.Clear();
                                     tempMessage.parameters.Add("CONNECTION_RELEASE");
-                                   // tempMessage.parameters.Add((String)msg.parameters[3]);//w params[3] jest jakies call_id
+                                    tempMessage.parameters.Add((String)msg.parameters[3]);//w params[3] jest jakies call_id
                                     tempMessage.dest_component_name = "CC1";
                                     pc.sendData("CC1", tempMessage);
                                     setLogText("Wyslalem: " + tempMessage.parameters[0] + " do " + tempMessage.dest_component_name + "\n");
                                       break;
 
-                                case "NO_ESTABLISHED":
+                                case "CONNECTION_RELEASE_CONFIRM":
                                       setLogText("Dostalem " + (String)msg.parameters[0] + "od " + msg.source_component_name + "\n");
                                       if (msg.source_component_name == "CC1")
                                       {
-                                          setLogText("CC1 powiedzial ze polaczenie jest rozerwane\n");
-                                          tempMessage.parameters.Add("NO_ESTABLISHED");
+
+                                          tempMessage.parameters.Add("CONNECTION_RELEASE_CONFIRM");
                                           tempMessage.dest_component_name = "CLIENT1";
                                           pc.sendData("CLIENT1", tempMessage);
                                           setLogText("Wyslalem: " + tempMessage.parameters[0] + " do " + tempMessage.dest_component_name + "\n");

@@ -511,14 +511,24 @@ namespace ClientNode
                                 {
                                     switch ((String)msg.parameters[0])
                                     {
-                                        case "OK":
+                                        case "CONNECTION_CONFIRM":
                                             if (msg.source_component_name == "NCC")
                                             {
-                                                setLogText("NCC powiedzial OK, moge wysylac\n\n");
+                                                setLogText("NCC powiedzial CONNECTION_CONFIRM  , moge wysylac\n\n");
                                                 
 
                                                 //button1.Enabled = true;
                                             }
+                                            break;
+                                        case "CONNECTION_RELEASE_CONFIRM":
+                                            if (msg.source_component_name == "NCC")
+                                            {
+                                                setLogText("NCC powiedzial CONNECTION_RELEASE_CONFIRM, polaczenie rozerwane\n\n");
+
+
+                                                //button1.Enabled = true;
+                                            }
+
                                             break;
 
                                         case "CALL_ID":
